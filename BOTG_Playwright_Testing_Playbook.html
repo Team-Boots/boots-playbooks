@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playwright Testing Playbook | Boots On The Ground AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --midnight: #0D1521;
+    --gold: #F7B844;
+    --gold-dim: #c49033;
+    --gold-glow: rgba(247,184,68,0.08);
+    --white: #ffffff;
+    --body-text: #1a202c;
+    --gray-100: #f4f6f9;
+    --gray-300: #cbd5e0;
+    --gray-500: #718096;
+    --border-gray: #e2e8f0;
+    --success: #48bb78;
+    --danger: #fc8181;
+    --warning: #f6ad55;
+    --p0-red: #ff4757;
+    --code-bg: #0a1628;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--body-text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--midnight);
+    border-bottom: 3px solid var(--gold);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .header-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--midnight);
+    flex-shrink: 0;
+  }
+
+  .header-brand-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    line-height: 1.1;
+  }
+
+  .header-badge {
+    background: var(--p0-red);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: var(--midnight);
+    border-right: 1px solid rgba(247,184,68,0.15);
+    overflow-y: auto;
+    padding: 1.5rem 0;
+    z-index: 90;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(247,184,68,0.2); border-radius: 2px; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0.75rem 1.5rem 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.55rem 1.5rem;
+    color: var(--gray-300);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-link:hover, .nav-link.active {
+    color: var(--gold);
+    background: rgba(247,184,68,0.08);
+    border-left-color: var(--gold);
+  }
+
+  .nav-link .nav-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold-dim);
+    min-width: 18px;
+  }
+
+  .nav-tag {
+    margin-left: auto;
+    background: var(--p0-red);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: 260px;
+    padding-top: 64px;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 5rem 4rem 4rem;
+    background: var(--midnight);
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(247,184,68,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(247,184,68,0.1);
+    border: 1px solid rgba(247,184,68,0.3);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero h1 span {
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--gray-300);
+    margin-top: 1.25rem;
+    max-width: 600px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hero-meta-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .hero-meta-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-300);
+  }
+
+  .p0-banner {
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255,71,87,0.1);
+    border: 1px solid rgba(255,71,87,0.3);
+    border-left: 4px solid var(--p0-red);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    max-width: 700px;
+  }
+
+  .p0-icon { font-size: 1.5rem; flex-shrink: 0; }
+
+  .p0-text {
+    font-size: 13.5px;
+    color: var(--gray-300);
+    line-height: 1.5;
+  }
+
+  .p0-text strong { color: var(--p0-red); }
+
+  /* ── CONTENT SECTIONS (WHITE BACKGROUND) ── */
+  .content {
+    padding: 3rem 4rem;
+    max-width: 960px;
+    background: var(--white);
+  }
+
+  .section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-gray);
+  }
+
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 44px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.9rem;
+    letter-spacing: 1.5px;
+    color: var(--midnight);
+    line-height: 1.1;
+  }
+
+  .subsection {
+    margin-bottom: 2.5rem;
+  }
+
+  .subsection-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--midnight);
+    margin-bottom: 0.875rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subsection-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: var(--gold);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  p {
+    color: var(--body-text);
+    margin-bottom: 1rem;
+    font-size: 15px;
+  }
+
+  /* ── CODE BLOCKS (DARK) ── */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+    margin: 1.25rem 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    background: rgba(247,184,68,0.06);
+    border-bottom: 1px solid rgba(247,184,68,0.12);
+  }
+
+  .code-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .code-lang {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+
+  .code-block pre {
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #a8b8d0;
+  }
+
+  .code-block pre::-webkit-scrollbar { height: 4px; }
+  .code-block pre::-webkit-scrollbar-track { background: transparent; }
+  .code-block pre::-webkit-scrollbar-thumb { background: rgba(247,184,68,0.2); }
+
+  .c-comment { color: #546e7a; }
+  .c-keyword { color: #89b4fa; }
+  .c-string { color: #a6e3a1; }
+  .c-function { color: #f38ba8; }
+  .c-number { color: #fab387; }
+  .c-cmd { color: var(--gold); }
+
+  /* ── INLINE CODE ── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: rgba(247,184,68,0.1);
+    color: var(--midnight);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(247,184,68,0.2);
+  }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    border-radius: 10px;
+    border: 1px solid var(--border-gray);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  thead {
+    background: var(--midnight);
+  }
+
+  th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    border-bottom: 2px solid var(--gold);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border-gray);
+    color: var(--body-text);
+    vertical-align: top;
+  }
+
+  td code { font-size: 12px; }
+
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--gray-100); }
+  tr:hover td { background: rgba(247,184,68,0.06); }
+
+  .priority-p0 { color: var(--p0-red); font-weight: 700; }
+  .priority-p1 { color: var(--warning); font-weight: 600; }
+  .priority-p2 { color: var(--success); font-weight: 600; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .callout-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 2px; }
+
+  .callout-body { flex: 1; }
+  .callout-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.5px;
+  }
+  .callout-body p {
+    font-size: 13.5px;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .callout-gold {
+    background: rgba(247,184,68,0.08);
+    border: 1px solid rgba(247,184,68,0.25);
+    border-left: 4px solid var(--gold);
+  }
+  .callout-gold .callout-title { color: var(--midnight); }
+  .callout-gold .callout-body p { color: var(--body-text); }
+
+  .callout-red {
+    background: rgba(255,71,87,0.06);
+    border: 1px solid rgba(255,71,87,0.2);
+    border-left: 4px solid var(--p0-red);
+  }
+  .callout-red .callout-title { color: var(--p0-red); }
+  .callout-red .callout-body p { color: var(--body-text); }
+
+  .callout-green {
+    background: rgba(72,187,120,0.06);
+    border: 1px solid rgba(72,187,120,0.2);
+    border-left: 4px solid var(--success);
+  }
+  .callout-green .callout-title { color: #2f855a; }
+  .callout-green .callout-body p { color: var(--body-text); }
+
+  /* ── CHECKLISTS ── */
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 1rem 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 14px;
+    color: var(--body-text);
+    line-height: 1.5;
+  }
+
+  .checklist .check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-gray);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .checklist .check:hover { border-color: var(--gold); background: var(--gold-glow); }
+  .checklist .check.done { background: var(--gold); border-color: var(--gold); }
+  .checklist .check.done::after { content: '\2713'; color: var(--midnight); font-weight: 900; font-size: 11px; }
+
+  /* ── COMMAND GRID ── */
+  .cmd-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+
+  .cmd-card {
+    background: var(--gray-100);
+    border: 1px solid var(--border-gray);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .cmd-card:hover { border-color: var(--gold); }
+
+  .cmd-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--midnight);
+    margin-bottom: 0.4rem;
+    word-break: break-all;
+    font-weight: 600;
+  }
+
+  .cmd-desc {
+    font-size: 12px;
+    color: var(--gray-500);
+    line-height: 1.4;
+  }
+
+  /* ── SELECTOR PRIORITY ── */
+  .selector-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .selector-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--gray-100);
+    border: 1px solid var(--border-gray);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-size: 13px;
+  }
+
+  .sel-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    min-width: 30px;
+    text-align: center;
+  }
+
+  .sel-rank.best { color: var(--success); }
+  .sel-rank.avoid { color: var(--danger); }
+
+  .sel-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--midnight);
+    min-width: 140px;
+    font-weight: 600;
+  }
+
+  .sel-example { color: var(--gray-500); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── PHASE CARDS ── */
+  .phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin: 1.25rem 0;
+  }
+
+  .phase-card {
+    background: var(--white);
+    border: 1px solid var(--border-gray);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .phase-card:hover { border-color: var(--gold); }
+
+  .phase-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 0.4rem;
+  }
+
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    color: var(--midnight);
+    margin-bottom: 1rem;
+  }
+
+  .phase-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .phase-items li {
+    font-size: 13px;
+    color: var(--body-text);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .phase-items li::before {
+    content: '\2192';
+    color: var(--gold);
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+
+  /* ── GOLDEN RULE ── */
+  .golden-rule {
+    background: rgba(247,184,68,0.08);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .golden-rule-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--midnight);
+    margin-bottom: 0.75rem;
+  }
+
+  .golden-rule p {
+    font-size: 15px;
+    color: var(--body-text);
+    margin: 0;
+  }
+
+  .golden-rule code {
+    background: rgba(247,184,68,0.2);
+    font-size: 14px;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    margin-left: 260px;
+    background: var(--midnight);
+    border-top: 3px solid var(--gold);
+    padding: 2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+
+  .footer-meta {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+
+  /* ── LAYER BADGES ── */
+  .layer-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-unit { background: rgba(72,187,120,0.15); color: #2f855a; }
+  .badge-integration { background: rgba(246,173,85,0.15); color: #c05621; }
+  .badge-e2e { background: rgba(252,129,129,0.15); color: #c53030; }
+  .badge-visual { background: rgba(147,112,219,0.15); color: #6b46c1; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main, .site-footer { margin-left: 0; }
+    .content { padding: 2rem 1.5rem; }
+    .hero { padding: 3rem 1.5rem; }
+    .cmd-grid, .phases { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="#" class="header-brand">
+    <div class="header-logo">BOTG</div>
+    <div class="header-brand-text">Boots On The Ground AI</div>
+  </a>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <span style="font-size:12px;color:var(--gray-500);">Playwright Testing Playbook</span>
+    <span class="header-badge">P0 Security Response</span>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="nav-section-label">Overview</div>
+  <a href="#why" class="nav-link"><span class="nav-num">01</span>Why Playwright</a>
+  <a href="#install" class="nav-link"><span class="nav-num">02</span>Installation & Setup</a>
+
+  <div class="nav-section-label">Commands</div>
+  <a href="#commands" class="nav-link"><span class="nav-num">03</span>Terminal Commands</a>
+
+  <div class="nav-section-label">Critical Testing</div>
+  <a href="#multitenant" class="nav-link"><span class="nav-num">04</span>Multi-Tenant Isolation <span class="nav-tag">P0</span></a>
+  <a href="#superpowers" class="nav-link"><span class="nav-num">05</span>Playwright Superpowers</a>
+  <a href="#pom" class="nav-link"><span class="nav-num">06</span>Page Object Model</a>
+
+  <div class="nav-section-label">CI/CD & Workflow</div>
+  <a href="#cicd" class="nav-link"><span class="nav-num">07</span>CI/CD Integration</a>
+  <a href="#cheatsheet" class="nav-link"><span class="nav-num">08</span>Cheat Sheet</a>
+  <a href="#workflow" class="nav-link"><span class="nav-num">09</span>Testing Workflow</a>
+  <a href="#checklist" class="nav-link"><span class="nav-num">10</span>Implementation Checklist</a>
+
+  <div style="padding:1.5rem;margin-top:1rem;border-top:1px solid rgba(247,184,68,0.1);">
+    <div style="font-size:10px;color:var(--gold-dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.5rem;">Golden Rule</div>
+    <div style="font-size:11.5px;color:var(--gray-500);line-height:1.5;">Always run <code style="font-size:10.5px;">test:e2e:p0</code> before every push. No exceptions.</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO (dark — structural element per brand guidelines) -->
+  <div class="hero">
+    <div class="hero-eyebrow">Boots Playbook Series &middot; March 2026</div>
+    <h1>Playwright<br><span>Testing</span></h1>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:var(--gold-dim);margin-top:0.5rem;">Multi-Tenant Security & Terminal Workflow Guide</div>
+    <p class="hero-sub">Built in response to the P0 multi-tenant data isolation incident. This playbook gives you full control over unit, QA, workers, integration, and E2E testing — so code never breaks production again.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Project</span>
+        <span class="hero-meta-value">Boots Portal</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Version</span>
+        <span class="hero-meta-value">1.0</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Stack</span>
+        <span class="hero-meta-value">TypeScript &middot; Vitest &middot; Playwright</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Classification</span>
+        <span class="hero-meta-value">Internal — Confidential</span>
+      </div>
+    </div>
+    <div class="p0-banner">
+      <span class="p0-icon">&#x1F6A8;</span>
+      <div class="p0-text">
+        <strong>P0 Response Playbook:</strong> A multi-tenant data leak was discovered in Boots Portal. Every test in this playbook is designed to catch that exact class of bug and prevent it from ever reaching production again.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT (white background) -->
+  <div class="content">
+
+    <!-- SECTION 1: WHY PLAYWRIGHT -->
+    <section class="section" id="why">
+      <div class="section-header">
+        <div class="section-num">01</div>
+        <div class="section-title">Why Playwright for Boots Portal</div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">What Playwright Actually Is</div>
+        <p>Playwright is an open-source end-to-end testing framework built by Microsoft. Unlike unit tests (which test functions) or integration tests (which test APIs), Playwright launches a real browser, clicks real buttons, fills real forms, and asserts what a real user would see. It is the closest thing to having a human QA tester running through your app 24/7.</p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Why Playwright Over Cypress or Selenium</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Capability</th><th>Playwright</th><th>Cypress</th><th>Selenium</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Multi-browser (Chrome, Firefox, Safari)</td><td><strong style="color:var(--success)">&#10003; Native</strong></td><td>Chrome/Edge only</td><td>Yes but heavy</td></tr>
+              <tr><td>Multi-tab / multi-context testing</td><td><strong style="color:var(--success)">&#10003; Native</strong></td><td>No</td><td>Limited</td></tr>
+              <tr><td>Auto-wait for elements</td><td><strong style="color:var(--success)">Built-in</strong></td><td>Built-in</td><td>Manual waits</td></tr>
+              <tr><td>API testing built-in</td><td><strong style="color:var(--success)">&#10003; request context</strong></td><td>cy.request only</td><td>No</td></tr>
+              <tr><td>Parallel execution</td><td><strong style="color:var(--success)">Native sharding</strong></td><td>Paid (Cypress Cloud)</td><td>Grid required</td></tr>
+              <tr><td>Trace viewer / debugging</td><td><strong style="color:var(--success)">Trace viewer + codegen</strong></td><td>Time travel UI</td><td>Logs only</td></tr>
+              <tr><td>Network interception</td><td><strong style="color:var(--success)">Full route control</strong></td><td>cy.intercept</td><td>No native</td></tr>
+              <tr><td>Multi-tenant context isolation</td><td><strong style="color:var(--success)">BrowserContext per tenant</strong></td><td>Not supported</td><td>Separate drivers</td></tr>
+              <tr><td>Language support</td><td><strong style="color:var(--success)">JS, TS, Python, Java, .NET</strong></td><td>JS/TS only</td><td>All major</td></tr>
+              <tr><td>Speed</td><td><strong style="color:var(--success)">Fast (WebSocket)</strong></td><td>Medium (in-browser)</td><td>Slow (HTTP bridge)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-gold">
+          <span class="callout-icon">&#x1F510;</span>
+          <div class="callout-body">
+            <div class="callout-title">Why This Matters for Your P0</div>
+            <p>Playwright's <strong>BrowserContext</strong> feature lets you simulate two completely separate users (Tenant A and Tenant B) in the same test, each with their own cookies, auth state, and storage. This is exactly what you need to verify multi-tenant isolation — one test can prove that Tenant A's proposals never leak into Tenant B's dashboard.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: INSTALLATION -->
+    <section class="section" id="install">
+      <div class="section-header">
+        <div class="section-num">02</div>
+        <div class="section-title">Installation & Project Setup</div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Install Playwright in Boots Portal</div>
+        <p>Run these commands from your Boots Portal project root:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">terminal</span><span class="code-lang">bash</span></div>
+          <pre><span class="c-comment"># Install Playwright and browsers</span>
+<span class="c-cmd">npm init playwright@latest</span>
+
+<span class="c-comment"># When prompted, select:</span>
+<span class="c-comment">#  TypeScript</span>
+<span class="c-comment">#  tests folder: e2e/</span>
+<span class="c-comment">#  GitHub Actions CI: Yes</span>
+<span class="c-comment">#  Install browsers: Yes</span>
+
+<span class="c-comment"># This creates:</span>
+<span class="c-comment">#  playwright.config.ts</span>
+<span class="c-comment">#  e2e/ folder</span>
+<span class="c-comment">#  .github/workflows/playwright.yml</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Project Structure</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">boots-proposals/ folder structure</span><span class="code-lang">tree</span></div>
+          <pre>boots-proposals/
+├── e2e/
+│   ├── fixtures/          <span class="c-comment"># Reusable test setup (auth, tenants)</span>
+│   │   ├── auth.setup.ts  <span class="c-comment"># Login + save session state</span>
+│   │   └── tenant.fixture.ts  <span class="c-comment"># Multi-tenant context factory</span>
+│   ├── pages/             <span class="c-comment"># Page Object Models</span>
+│   │   ├── login.page.ts
+│   │   ├── dashboard.page.ts
+│   │   ├── proposal.page.ts
+│   │   └── brain.page.ts
+│   ├── tests/
+│   │   ├── auth.spec.ts
+│   │   ├── proposal-crud.spec.ts
+│   │   ├── multi-tenant.spec.ts    <span class="c-comment"># P0 regression tests</span>
+│   │   ├── brain-generation.spec.ts
+│   │   └── sharing.spec.ts
+│   └── utils/
+│       ├── test-data.ts   <span class="c-comment"># Factory functions for test data</span>
+│       └── api-helpers.ts <span class="c-comment"># Direct Supabase API calls</span>
+├── playwright.config.ts
+└── .env.test              <span class="c-comment"># Test environment variables</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">playwright.config.ts — Production Ready</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">playwright.config.ts</span><span class="code-lang">typescript</span></div>
+          <pre><span class="c-keyword">import</span> { defineConfig, devices } <span class="c-keyword">from</span> <span class="c-string">'@playwright/test'</span>;
+
+<span class="c-keyword">export default</span> defineConfig({
+  testDir: <span class="c-string">'./e2e/tests'</span>,
+  fullyParallel: <span class="c-keyword">true</span>,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? <span class="c-number">2</span> : <span class="c-number">0</span>,
+  workers: process.env.CI ? <span class="c-number">1</span> : <span class="c-keyword">undefined</span>,
+  reporter: [
+    [<span class="c-string">'html'</span>, { open: <span class="c-string">'never'</span> }],
+    [<span class="c-string">'list'</span>],
+    ...(process.env.CI ? [[<span class="c-string">'github'</span>]] : []),
+  ],
+  use: {
+    baseURL: process.env.BASE_URL || <span class="c-string">'http://localhost:3000'</span>,
+    trace: <span class="c-string">'on-first-retry'</span>,
+    screenshot: <span class="c-string">'only-on-failure'</span>,
+    video: <span class="c-string">'retain-on-failure'</span>,
+  },
+  projects: [
+    { name: <span class="c-string">'setup'</span>, testMatch: <span class="c-string">/.*\.setup\.ts/</span> },
+    {
+      name: <span class="c-string">'chromium'</span>,
+      use: { ...devices[<span class="c-string">'Desktop Chrome'</span>] },
+      dependencies: [<span class="c-string">'setup'</span>],
+    },
+    {
+      name: <span class="c-string">'tenant-isolation'</span>,
+      testMatch: <span class="c-string">'**/multi-tenant.spec.ts'</span>,
+      use: { ...devices[<span class="c-string">'Desktop Chrome'</span>] },
+    },
+  ],
+  webServer: {
+    command: <span class="c-string">'npm run dev'</span>,
+    url: <span class="c-string">'http://localhost:3000'</span>,
+    reuseExistingServer: !process.env.CI,
+  },
+});</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: COMMANDS -->
+    <section class="section" id="commands">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <div class="section-title">Terminal Command Reference</div>
+      </div>
+
+      <p style="margin-bottom:1.5rem;">These are the commands you will use daily. Bookmark this page.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Essential Commands</div>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright test</div>
+            <div class="cmd-desc">Run all tests headless — use for CI/CD and quick validation</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright test --headed</div>
+            <div class="cmd-desc">Run with visible browser — use when debugging or watching behavior</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright test --ui</div>
+            <div class="cmd-desc">Open interactive test runner — use during development</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright test --debug</div>
+            <div class="cmd-desc">Step through with inspector — use for debugging specific failures</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright test multi-tenant</div>
+            <div class="cmd-desc">Run only multi-tenant tests — use after P0-related code changes</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright test --project=tenant-isolation</div>
+            <div class="cmd-desc">Run isolation project only — targeted regression testing</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright show-report</div>
+            <div class="cmd-desc">Open HTML test report — run after any test run</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright show-trace trace.zip</div>
+            <div class="cmd-desc">Open trace viewer — use for debugging failed tests</div>
+          </div>
+          <div class="cmd-card">
+            <div class="cmd-code">npx playwright codegen http://localhost:3000</div>
+            <div class="cmd-desc">Record actions as code — fastest way to write new tests</div>
+          </div>
+          <div class="cmd-card" style="border-color:rgba(255,71,87,0.5)">
+            <div class="cmd-code" style="color:var(--p0-red)">npx playwright test --grep @p0</div>
+            <div class="cmd-desc">Run only P0-tagged tests — run this before EVERY deploy</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Power Combos</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">terminal</span><span class="code-lang">bash</span></div>
+          <pre><span class="c-comment"># Run multi-tenant tests with full trace + video</span>
+<span class="c-cmd">npx playwright test multi-tenant --trace on --video on</span>
+
+<span class="c-comment"># Run a specific test by name</span>
+<span class="c-cmd">npx playwright test -g 'should not leak proposals between tenants'</span>
+
+<span class="c-comment"># Run with retries for flaky investigation</span>
+<span class="c-cmd">npx playwright test --retries=3 --reporter=html</span>
+
+<span class="c-comment"># Update screenshots for visual regression</span>
+<span class="c-cmd">npx playwright test --update-snapshots</span>
+
+<span class="c-comment"># Run on all browsers</span>
+<span class="c-cmd">npx playwright test --project=chromium --project=firefox --project=webkit</span>
+
+<span class="c-comment"># Run in parallel with 4 workers</span>
+<span class="c-cmd">npx playwright test --workers=4</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">package.json Scripts — Add These Now</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">package.json</span><span class="code-lang">json</span></div>
+          <pre>{
+  <span class="c-string">"scripts"</span>: {
+    <span class="c-string">"test:unit"</span>: <span class="c-string">"vitest run"</span>,
+    <span class="c-string">"test:e2e"</span>: <span class="c-string">"npx playwright test"</span>,
+    <span class="c-string">"test:e2e:ui"</span>: <span class="c-string">"npx playwright test --ui"</span>,
+    <span class="c-string">"test:e2e:p0"</span>: <span class="c-string">"npx playwright test --grep @p0"</span>,
+    <span class="c-string">"test:all"</span>: <span class="c-string">"npm run test:unit && npm run test:e2e"</span>,
+    <span class="c-string">"test:ci"</span>: <span class="c-string">"npm run test:unit && npx playwright test --project=chromium"</span>
+  }
+}</pre>
+        </div>
+        <div class="callout callout-red">
+          <span class="callout-icon">&#x1F6E1;&#xFE0F;</span>
+          <div class="callout-body">
+            <div class="callout-title">Pre-Deploy Safety Net</div>
+            <p>Before every git push or Vercel deploy, run: <code>npm run test:e2e:p0</code>. This runs only your critical multi-tenant isolation tests in under 30 seconds. Make this muscle memory.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: MULTI-TENANT -->
+    <section class="section" id="multitenant">
+      <div class="section-header">
+        <div class="section-num">04</div>
+        <div class="section-title">Multi-Tenant Isolation Testing</div>
+      </div>
+
+      <div class="callout callout-red">
+        <span class="callout-icon">&#x1F6A8;</span>
+        <div class="callout-body">
+          <div class="callout-title">P0 Context — Why This Section Exists</div>
+          <p>A multi-tenant data leak was discovered in Boots Portal. The tests in this section are designed to catch this exact class of bug and prevent it from ever reaching production again. <strong style="color:var(--p0-red)">These tests must run on every deploy.</strong></p>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">The Core Pattern: Two Tenants, One Test</div>
+        <p>Playwright's BrowserContext lets you simulate completely separate users in the same test. Each context has its own cookies, localStorage, and session — just like two different people opening your app in two different browsers.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">e2e/tests/multi-tenant.spec.ts</span><span class="code-lang">typescript</span></div>
+          <pre><span class="c-keyword">import</span> { test, expect } <span class="c-keyword">from</span> <span class="c-string">'@playwright/test'</span>;
+
+test.describe(<span class="c-string">'Multi-Tenant Isolation @p0'</span>, () => {
+  test(<span class="c-string">'Tenant A proposals must NOT appear for Tenant B'</span>, <span class="c-keyword">async</span> ({ browser }) => {
+    <span class="c-comment">// Create two completely separate browser contexts</span>
+    <span class="c-keyword">const</span> tenantAContext = <span class="c-keyword">await</span> browser.newContext();
+    <span class="c-keyword">const</span> tenantBContext = <span class="c-keyword">await</span> browser.newContext();
+    <span class="c-keyword">const</span> tenantAPage = <span class="c-keyword">await</span> tenantAContext.newPage();
+    <span class="c-keyword">const</span> tenantBPage = <span class="c-keyword">await</span> tenantBContext.newPage();
+
+    <span class="c-comment">// Login as Tenant A</span>
+    <span class="c-keyword">await</span> tenantAPage.goto(<span class="c-string">'/login'</span>);
+    <span class="c-keyword">await</span> tenantAPage.getByLabel(<span class="c-string">'Email'</span>).fill(<span class="c-string">'tenantA@test.com'</span>);
+    <span class="c-keyword">await</span> tenantAPage.getByLabel(<span class="c-string">'Password'</span>).fill(<span class="c-string">'testpass123'</span>);
+    <span class="c-keyword">await</span> tenantAPage.getByRole(<span class="c-string">'button'</span>, { name: <span class="c-string">'Sign In'</span> }).click();
+    <span class="c-keyword">await</span> tenantAPage.waitForURL(<span class="c-string">'/dashboard'</span>);
+
+    <span class="c-comment">// Tenant A creates a proposal</span>
+    <span class="c-keyword">await</span> tenantAPage.getByRole(<span class="c-string">'link'</span>, { name: <span class="c-string">'New Proposal'</span> }).click();
+    <span class="c-keyword">await</span> tenantAPage.getByLabel(<span class="c-string">'Meeting Notes'</span>).fill(
+      <span class="c-string">'SECRET: Client wants $50K budget for AI chatbot'</span>
+    );
+    <span class="c-keyword">await</span> tenantAPage.getByRole(<span class="c-string">'button'</span>, { name: <span class="c-string">'Generate'</span> }).click();
+    <span class="c-keyword">await</span> tenantAPage.waitForSelector(<span class="c-string">'[data-testid="proposal-card"]'</span>);
+
+    <span class="c-comment">// Login as Tenant B</span>
+    <span class="c-keyword">await</span> tenantBPage.goto(<span class="c-string">'/login'</span>);
+    <span class="c-keyword">await</span> tenantBPage.getByLabel(<span class="c-string">'Email'</span>).fill(<span class="c-string">'tenantB@test.com'</span>);
+    <span class="c-keyword">await</span> tenantBPage.getByLabel(<span class="c-string">'Password'</span>).fill(<span class="c-string">'testpass456'</span>);
+    <span class="c-keyword">await</span> tenantBPage.getByRole(<span class="c-string">'button'</span>, { name: <span class="c-string">'Sign In'</span> }).click();
+    <span class="c-keyword">await</span> tenantBPage.waitForURL(<span class="c-string">'/dashboard'</span>);
+
+    <span class="c-comment">// CRITICAL ASSERTION: Tenant B must NOT see Tenant A's data</span>
+    <span class="c-keyword">const</span> allText = <span class="c-keyword">await</span> tenantBPage.textContent(<span class="c-string">'body'</span>);
+    expect(allText).not.toContain(<span class="c-string">'SECRET'</span>);
+    expect(allText).not.toContain(<span class="c-string">'$50K budget'</span>);
+    expect(allText).not.toContain(<span class="c-string">'tenantA'</span>);
+
+    <span class="c-comment">// Cleanup</span>
+    <span class="c-keyword">await</span> tenantAContext.close();
+    <span class="c-keyword">await</span> tenantBContext.close();
+  });
+});</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">API-Level Isolation Tests (Supabase RLS)</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">e2e/tests/multi-tenant-api.spec.ts</span><span class="code-lang">typescript</span></div>
+          <pre><span class="c-keyword">import</span> { test, expect } <span class="c-keyword">from</span> <span class="c-string">'@playwright/test'</span>;
+
+test.describe(<span class="c-string">'API Multi-Tenant Isolation @p0'</span>, () => {
+  test(<span class="c-string">'Supabase RLS blocks cross-tenant reads'</span>, <span class="c-keyword">async</span> ({ request }) => {
+    <span class="c-comment">// Authenticate as Tenant A via API</span>
+    <span class="c-keyword">const</span> authA = <span class="c-keyword">await</span> request.post(<span class="c-string">'/api/auth/login'</span>, {
+      data: { email: <span class="c-string">'tenantA@test.com'</span>, password: <span class="c-string">'testpass123'</span> }
+    });
+    <span class="c-keyword">const</span> tokenA = (<span class="c-keyword">await</span> authA.json()).access_token;
+
+    <span class="c-comment">// Create proposal as Tenant A</span>
+    <span class="c-keyword">const</span> createRes = <span class="c-keyword">await</span> request.post(<span class="c-string">'/api/proposals'</span>, {
+      headers: { Authorization: `Bearer ${tokenA}` },
+      data: { title: <span class="c-string">'Secret Proposal'</span>, notes: <span class="c-string">'Confidential data'</span> }
+    });
+    <span class="c-keyword">const</span> proposalId = (<span class="c-keyword">await</span> createRes.json()).id;
+
+    <span class="c-comment">// Authenticate as Tenant B</span>
+    <span class="c-keyword">const</span> authB = <span class="c-keyword">await</span> request.post(<span class="c-string">'/api/auth/login'</span>, {
+      data: { email: <span class="c-string">'tenantB@test.com'</span>, password: <span class="c-string">'testpass456'</span> }
+    });
+    <span class="c-keyword">const</span> tokenB = (<span class="c-keyword">await</span> authB.json()).access_token;
+
+    <span class="c-comment">// Tenant B tries to read Tenant A's proposal</span>
+    <span class="c-keyword">const</span> readRes = <span class="c-keyword">await</span> request.get(`/api/proposals/${proposalId}`, {
+      headers: { Authorization: `Bearer ${tokenB}` }
+    });
+
+    <span class="c-comment">// MUST be 403 or 404, NEVER 200</span>
+    expect([<span class="c-number">403</span>, <span class="c-number">404</span>]).toContain(readRes.status());
+
+    <span class="c-comment">// Tenant B lists all proposals — must not include Tenant A's</span>
+    <span class="c-keyword">const</span> listRes = <span class="c-keyword">await</span> request.get(<span class="c-string">'/api/proposals'</span>, {
+      headers: { Authorization: `Bearer ${tokenB}` }
+    });
+    <span class="c-keyword">const</span> proposals = <span class="c-keyword">await</span> listRes.json();
+    <span class="c-keyword">const</span> ids = proposals.map(p => p.id);
+    expect(ids).not.toContain(proposalId);
+  });
+});</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">What to Test for Multi-Tenant</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Test Case</th><th>Priority</th><th>Method</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Proposals don't leak between tenants</td><td><span class="priority-p0">P0</span></td><td>Browser + API</td></tr>
+              <tr><td>Brain/client intelligence is tenant-scoped</td><td><span class="priority-p0">P0</span></td><td>API</td></tr>
+              <tr><td>Shared proposal links respect permissions</td><td><span class="priority-p0">P0</span></td><td>Browser</td></tr>
+              <tr><td>Dashboard data filtered by org_id</td><td><span class="priority-p0">P0</span></td><td>Browser + API</td></tr>
+              <tr><td>Contract generation scoped to tenant</td><td><span class="priority-p1">P1</span></td><td>API</td></tr>
+              <tr><td>Report builder data isolated</td><td><span class="priority-p1">P1</span></td><td>Browser</td></tr>
+              <tr><td>Search results tenant-scoped</td><td><span class="priority-p1">P1</span></td><td>API</td></tr>
+              <tr><td>Audit logs show correct tenant actions</td><td><span class="priority-p2">P2</span></td><td>API</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: SUPERPOWERS -->
+    <section class="section" id="superpowers">
+      <div class="section-header">
+        <div class="section-num">05</div>
+        <div class="section-title">Playwright Superpowers</div>
+      </div>
+      <p>These capabilities go far beyond basic click-and-assert testing. Each one saves hours of manual work.</p>
+
+      <div class="subsection">
+        <div class="subsection-title">Codegen — Record Tests by Clicking</div>
+        <p>This is the fastest way to write tests. Playwright opens a browser, you click through your app, and it writes the test code in real time.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">terminal</span><span class="code-lang">bash</span></div>
+          <pre><span class="c-comment"># Open codegen pointed at your local dev server</span>
+<span class="c-cmd">npx playwright codegen http://localhost:3000</span>
+
+<span class="c-comment"># With device emulation</span>
+<span class="c-cmd">npx playwright codegen --device='iPhone 14' http://localhost:3000</span>
+
+<span class="c-comment"># Save directly to a file</span>
+<span class="c-cmd">npx playwright codegen --output e2e/tests/recorded.spec.ts http://localhost:3000</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Trace Viewer — Time-Travel Debugging</div>
+        <p>When a test fails, the trace viewer lets you step through every action, see screenshots at each step, inspect the DOM, view network requests, and see console logs.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">terminal</span><span class="code-lang">bash</span></div>
+          <pre><span class="c-comment"># Run tests with traces</span>
+<span class="c-cmd">npx playwright test --trace on</span>
+
+<span class="c-comment"># Open the trace file</span>
+<span class="c-cmd">npx playwright show-trace test-results/trace.zip</span>
+
+<span class="c-comment"># Or drag-and-drop the zip to:</span>
+<span class="c-comment"># https://trace.playwright.dev</span></pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">API Testing — Skip the Browser</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">e2e/tests/api.spec.ts</span><span class="code-lang">typescript</span></div>
+          <pre>test(<span class="c-string">'API: create and retrieve proposal'</span>, <span class="c-keyword">async</span> ({ request }) => {
+  <span class="c-keyword">const</span> response = <span class="c-keyword">await</span> request.post(<span class="c-string">'/api/proposals'</span>, {
+    data: { title: <span class="c-string">'Test'</span>, notes: <span class="c-string">'Meeting notes here'</span> }
+  });
+  expect(response.ok()).toBeTruthy();
+  <span class="c-keyword">const</span> body = <span class="c-keyword">await</span> response.json();
+  expect(body.id).toBeDefined();
+});</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Network Interception — Mock & Monitor</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">e2e/tests/error-handling.spec.ts</span><span class="code-lang">typescript</span></div>
+          <pre>test(<span class="c-string">'handles AI generation failure gracefully'</span>, <span class="c-keyword">async</span> ({ page }) => {
+  <span class="c-comment">// Mock the AI endpoint to return an error</span>
+  <span class="c-keyword">await</span> page.route(<span class="c-string">'**/api/generate'</span>, route =>
+    route.fulfill({ status: <span class="c-number">500</span>, body: <span class="c-string">'AI service down'</span> })
+  );
+
+  <span class="c-keyword">await</span> page.goto(<span class="c-string">'/proposals/new'</span>);
+  <span class="c-keyword">await</span> page.getByRole(<span class="c-string">'button'</span>, { name: <span class="c-string">'Generate'</span> }).click();
+
+  <span class="c-comment">// Assert graceful error handling</span>
+  <span class="c-keyword">await</span> expect(page.getByText(<span class="c-string">'generation failed'</span>)).toBeVisible();
+});</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Authentication State Reuse</div>
+        <p>Login once, reuse the session across all tests. This dramatically speeds up your test suite.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">e2e/fixtures/auth.setup.ts</span><span class="code-lang">typescript</span></div>
+          <pre><span class="c-keyword">import</span> { test <span class="c-keyword">as</span> setup, expect } <span class="c-keyword">from</span> <span class="c-string">'@playwright/test'</span>;
+
+setup(<span class="c-string">'authenticate'</span>, <span class="c-keyword">async</span> ({ page }) => {
+  <span class="c-keyword">await</span> page.goto(<span class="c-string">'/login'</span>);
+  <span class="c-keyword">await</span> page.getByLabel(<span class="c-string">'Email'</span>).fill(<span class="c-string">'test@bootsagentai.com'</span>);
+  <span class="c-keyword">await</span> page.getByLabel(<span class="c-string">'Password'</span>).fill(<span class="c-string">'testpassword'</span>);
+  <span class="c-keyword">await</span> page.getByRole(<span class="c-string">'button'</span>, { name: <span class="c-string">'Sign In'</span> }).click();
+  <span class="c-keyword">await</span> page.waitForURL(<span class="c-string">'/dashboard'</span>);
+
+  <span class="c-comment">// Save the authenticated state — reused by all tests</span>
+  <span class="c-keyword">await</span> page.context().storageState({ path: <span class="c-string">'.auth/user.json'</span> });
+});</pre>
+        </div>
+      </div>
+
+      <div class="callout callout-gold">
+        <span class="callout-icon">&#x1F4A1;</span>
+        <div class="callout-body">
+          <div class="callout-title">Codegen + Claude Code Combo</div>
+          <p>Use <code>npx playwright codegen</code> to record a rough test, then paste it into Claude Code and ask it to refactor using Page Object Model patterns and add proper assertions. Speed of recording + quality of AI-assisted code.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: PAGE OBJECT MODEL -->
+    <section class="section" id="pom">
+      <div class="section-header">
+        <div class="section-num">06</div>
+        <div class="section-title">Page Object Model</div>
+      </div>
+      <p>Page Objects keep your tests clean and maintainable. When the UI changes, you update one file instead of every test.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-filename">e2e/pages/proposal.page.ts</span><span class="code-lang">typescript</span></div>
+        <pre><span class="c-keyword">import</span> { Page, Locator, expect } <span class="c-keyword">from</span> <span class="c-string">'@playwright/test'</span>;
+
+<span class="c-keyword">export class</span> <span class="c-function">ProposalPage</span> {
+  <span class="c-keyword">readonly</span> page: Page;
+  <span class="c-keyword">readonly</span> meetingNotesInput: Locator;
+  <span class="c-keyword">readonly</span> generateButton: Locator;
+  <span class="c-keyword">readonly</span> streamingStatus: Locator;
+  <span class="c-keyword">readonly</span> proposalOutput: Locator;
+  <span class="c-keyword">readonly</span> proposalCards: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.meetingNotesInput = page.getByLabel(<span class="c-string">'Meeting Notes'</span>);
+    this.generateButton = page.getByRole(<span class="c-string">'button'</span>, { name: <span class="c-string">/generate/i</span> });
+    this.streamingStatus = page.locator(<span class="c-string">'[data-testid="streaming-status"]'</span>);
+    this.proposalOutput = page.locator(<span class="c-string">'[data-testid="proposal-output"]'</span>);
+    this.proposalCards = page.locator(<span class="c-string">'[data-testid="proposal-card"]'</span>);
+  }
+
+  <span class="c-keyword">async</span> generateProposal(notes: string) {
+    <span class="c-keyword">await</span> this.meetingNotesInput.fill(notes);
+    <span class="c-keyword">await</span> this.generateButton.click();
+    <span class="c-comment">// Wait for streaming to complete (90 second timeout for AI generation)</span>
+    <span class="c-keyword">await</span> this.streamingStatus.waitFor({ state: <span class="c-string">'hidden'</span>, timeout: <span class="c-number">90000</span> });
+    <span class="c-keyword">await</span> expect(this.proposalOutput).toBeVisible();
+  }
+
+  <span class="c-keyword">async</span> getProposalCount(): Promise&lt;number&gt; {
+    <span class="c-keyword">return await</span> this.proposalCards.count();
+  }
+
+  <span class="c-keyword">async</span> getProposalText(): Promise&lt;string&gt; {
+    <span class="c-keyword">return await</span> this.proposalOutput.textContent() || <span class="c-string">''</span>;
+  }
+}</pre>
+      </div>
+    </section>
+
+    <!-- SECTION 7: CI/CD -->
+    <section class="section" id="cicd">
+      <div class="section-header">
+        <div class="section-num">07</div>
+        <div class="section-title">CI/CD Integration</div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">GitHub Actions Workflow</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">.github/workflows/playwright.yml</span><span class="code-lang">yaml</span></div>
+          <pre>name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30</pre>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Pre-Push Git Hook (Husky)</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">.husky/pre-push</span><span class="code-lang">bash</span></div>
+          <pre>#!/bin/sh
+echo "Running P0 isolation tests..."
+<span class="c-cmd">npx playwright test --grep @p0 --project=chromium</span>
+echo "All P0 tests passed. Safe to push."</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: CHEAT SHEET -->
+    <section class="section" id="cheatsheet">
+      <div class="section-header">
+        <div class="section-num">08</div>
+        <div class="section-title">Quick Reference Cheat Sheet</div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Selector Priority (Best to Worst)</div>
+        <ul class="selector-list">
+          <li class="selector-item"><span class="sel-rank best">1</span><span class="sel-type">getByRole</span><span class="sel-example">page.getByRole('button', { name: 'Generate' })</span></li>
+          <li class="selector-item"><span class="sel-rank">2</span><span class="sel-type">getByLabel</span><span class="sel-example">page.getByLabel('Meeting Notes')</span></li>
+          <li class="selector-item"><span class="sel-rank">3</span><span class="sel-type">getByPlaceholder</span><span class="sel-example">page.getByPlaceholder('Enter notes...')</span></li>
+          <li class="selector-item"><span class="sel-rank">4</span><span class="sel-type">getByText</span><span class="sel-example">page.getByText('Proposal Generated')</span></li>
+          <li class="selector-item"><span class="sel-rank">5</span><span class="sel-type">getByTestId</span><span class="sel-example">page.getByTestId('proposal-card')</span></li>
+          <li class="selector-item"><span class="sel-rank avoid">6</span><span class="sel-type" style="color:var(--danger)">CSS/XPath</span><span class="sel-example" style="color:var(--danger)">page.locator('.btn-primary') — avoid this</span></li>
+        </ul>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Common Assertions</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Assertion</th><th>Use For</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>expect(locator).toBeVisible()</code></td><td>Element is on screen</td></tr>
+              <tr><td><code>expect(locator).toHaveText('...')</code></td><td>Element has specific text</td></tr>
+              <tr><td><code>expect(locator).toHaveCount(n)</code></td><td>Number of matching elements</td></tr>
+              <tr><td><code>expect(page).toHaveURL('...')</code></td><td>Current page URL</td></tr>
+              <tr><td><code>expect(page).toHaveTitle('...')</code></td><td>Page title</td></tr>
+              <tr><td><code>expect(response).toBeOK()</code></td><td>API returned 2xx</td></tr>
+              <tr><td><code>expect(locator).not.toBeVisible()</code></td><td>Element is hidden/removed</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: WORKFLOW -->
+    <section class="section" id="workflow">
+      <div class="section-header">
+        <div class="section-num">09</div>
+        <div class="section-title">Your Testing Workflow</div>
+      </div>
+      <p>Complete testing hierarchy showing where Playwright fits with your existing Vitest tests.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Layer</th><th>Tool</th><th>What It Tests</th><th>Speed</th><th>Run When</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="layer-badge badge-unit">Unit</span></td>
+              <td>Vitest</td>
+              <td>Individual functions, utils</td>
+              <td>&lt; 1 sec</td>
+              <td>Every save (watch mode)</td>
+            </tr>
+            <tr>
+              <td><span class="layer-badge badge-integration">Integration</span></td>
+              <td>Vitest</td>
+              <td>API routes, DB queries, RLS</td>
+              <td>1–5 sec</td>
+              <td>Before commit</td>
+            </tr>
+            <tr>
+              <td><span class="layer-badge badge-e2e">E2E Critical</span></td>
+              <td>Playwright <code>@p0</code></td>
+              <td>Multi-tenant isolation, auth</td>
+              <td>10–30 sec</td>
+              <td><strong style="color:var(--p0-red)">Before every push</strong></td>
+            </tr>
+            <tr>
+              <td><span class="layer-badge badge-e2e">E2E Full</span></td>
+              <td>Playwright</td>
+              <td>All user journeys</td>
+              <td>2–5 min</td>
+              <td>CI on every PR</td>
+            </tr>
+            <tr>
+              <td><span class="layer-badge badge-visual">Visual</span></td>
+              <td>Playwright screenshots</td>
+              <td>UI regression</td>
+              <td>1–3 min</td>
+              <td>Weekly or on UI changes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Pre-Deploy Command Sequence</div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-filename">terminal</span><span class="code-lang">bash</span></div>
+          <pre><span class="c-comment"># Step 1: Unit tests (fast feedback)</span>
+<span class="c-cmd">npm run test:unit</span>
+
+<span class="c-comment"># Step 2: P0 isolation tests (must pass — no exceptions)</span>
+<span class="c-cmd">npx playwright test --grep @p0</span>
+
+<span class="c-comment"># Step 3: Full E2E suite (if time allows)</span>
+<span class="c-cmd">npx playwright test</span>
+
+<span class="c-comment"># Step 4: Check the report</span>
+<span class="c-cmd">npx playwright show-report</span>
+
+<span class="c-comment"># Step 5: Deploy with confidence</span>
+<span class="c-cmd">git push</span></pre>
+        </div>
+      </div>
+
+      <div class="golden-rule">
+        <div class="golden-rule-title">&#x26A1; The Golden Rule</div>
+        <p>Never deploy without running <code>npm run test:e2e:p0</code> first. This single command runs your multi-tenant isolation tests and takes under 30 seconds. It is the cheapest insurance policy against shipping another P0.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 10: CHECKLIST -->
+    <section class="section" id="checklist">
+      <div class="section-header">
+        <div class="section-num">10</div>
+        <div class="section-title">Implementation Checklist</div>
+      </div>
+      <p>Work through these in order. Each step builds on the previous one. Click items to check them off.</p>
+
+      <div class="phases">
+        <div class="phase-card" style="border-color:rgba(255,71,87,0.4)">
+          <div class="phase-label">Phase 1</div>
+          <div class="phase-title" style="color:var(--p0-red)">Emergency — This Week</div>
+          <ul class="checklist">
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Install Playwright (<code>npm init playwright@latest</code>)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Write multi-tenant isolation test (Section 4.1)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Write API-level RLS test (Section 4.2)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add <code>@p0</code> tag to all isolation tests</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Run and verify all P0 tests pass</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-label">Phase 2</div>
+          <div class="phase-title">Foundation — Next 2 Weeks</div>
+          <ul class="checklist">
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Create Page Object Models (login, dashboard, proposal)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Set up auth state reuse (Section 5.6)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add auth flow tests (login, logout, session expiry)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add proposal CRUD tests (create, edit, delete)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Set up GitHub Actions CI (Section 7.1)</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-label">Phase 3</div>
+          <div class="phase-title">Coverage — Month 2</div>
+          <ul class="checklist">
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add Brain generation flow tests (streaming UI)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add proposal sharing/publishing tests</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add contract generation tests</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add visual regression baselines</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add mobile device emulation tests</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <div class="phase-label">Phase 4</div>
+          <div class="phase-title">Enterprise-Ready — Month 3</div>
+          <ul class="checklist">
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add pre-push git hook for P0 tests</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Set up test data factories for reproducible tenant creation</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add performance benchmarking (proposal gen &lt;60 sec)</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Document test coverage for SOC 2 audit trail</li>
+            <li><span class="check" onclick="this.classList.toggle('done')"></span>Add kill switch verification tests</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /content -->
+</main>
+
+<footer class="site-footer">
+  <div class="footer-brand">Boots On The Ground AI</div>
+  <div class="footer-meta">Playwright Testing Playbook &middot; March 2026 &middot; v1.0 &middot; Internal Confidential</div>
+</footer>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-70px 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boots On The Ground AI — Platform Playbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* ─── CSS Custom Properties ─────────────────────────── */
+    :root {
+      --navy: #152134;
+      --navy-light: #1e3050;
+      --navy-lighter: #2a4268;
+      --gold: #F7B844;
+      --gold-dark: #D4901A;
+      --gold-light: #fdd87a;
+      --teal: #4ECDC4;
+      --teal-light: #a8e6e0;
+      --coral: #FF6B6B;
+      --coral-light: #ffa8a8;
+      --apple-gray: #ecedf0;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --sidebar-width: 260px;
+      --section-max: 1100px;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-800);
+      background: var(--white);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Sidebar Navigation ───────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--navy);
+      padding: 2rem 0;
+      overflow-y: auto;
+      z-index: 100;
+      border-right: 3px solid var(--gold);
+    }
+    .sidebar-logo {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding: 0 1.5rem;
+    }
+    .sidebar-logo .logo-mark {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -2px;
+    }
+    .sidebar-logo .logo-mark span { color: var(--gold); }
+    .sidebar-logo .logo-sub {
+      font-size: 0.65rem;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-top: -4px;
+    }
+    .sidebar-divider {
+      height: 1px;
+      background: var(--navy-lighter);
+      margin: 1rem 1.5rem;
+    }
+    .sidebar nav { padding: 0 0.75rem; }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.75rem;
+      color: var(--gray-400);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 400;
+      border-radius: 6px;
+      transition: all 0.2s;
+      line-height: 1.3;
+    }
+    .sidebar nav a:hover {
+      color: var(--white);
+      background: var(--navy-light);
+    }
+    .sidebar nav a .nav-num {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--gold);
+      min-width: 1.4rem;
+    }
+    .sidebar nav a.nav-group {
+      margin-top: 0.75rem;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold-dark);
+      font-weight: 600;
+      pointer-events: none;
+      padding-left: 0.75rem;
+    }
+
+    /* ─── Main Content ─────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+    }
+
+    /* ─── Cover / Hero ─────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy) 100%);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(247,184,68,0.08) 0%, transparent 70%);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(78,205,196,0.06) 0%, transparent 70%);
+    }
+    .hero-logo {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: -4px;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-logo span { color: var(--gold); }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero .hero-sub {
+      font-size: 1.2rem;
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 1px;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero .hero-meta {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      position: relative;
+      z-index: 1;
+    }
+    .hero .hero-meta .badge {
+      display: inline-block;
+      background: rgba(247,184,68,0.15);
+      color: var(--gold);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 1rem;
+      border: 1px solid rgba(247,184,68,0.3);
+    }
+    .hero-tagline {
+      font-size: 0.9rem;
+      color: var(--gray-300);
+      max-width: 550px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Sections ─────────────────────────────────────── */
+    .section {
+      padding: 5rem 3rem;
+      max-width: var(--section-max);
+      margin: 0 auto;
+    }
+    .section-full {
+      padding: 5rem 3rem;
+      max-width: 100%;
+    }
+    .section-full .section-inner {
+      max-width: var(--section-max);
+      margin: 0 auto;
+    }
+    .section-alt {
+      background: var(--gray-50);
+    }
+    .section-navy {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    /* ─── Section Headers ──────────────────────────────── */
+    .section-header {
+      margin-bottom: 3rem;
+    }
+    .section-header .section-num {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+    .section-navy .section-header h2 { color: var(--white); }
+    .section-header .section-rule {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+    .section-header p {
+      font-size: 1rem;
+      color: var(--gray-500);
+      max-width: 700px;
+      line-height: 1.7;
+    }
+    .section-navy .section-header p { color: var(--gray-300); }
+
+    /* ─── Cards ────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      border: 1px solid var(--gray-200);
+    }
+    .card-accent {
+      border-left: 4px solid var(--gold);
+    }
+    .card-navy {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy-lighter);
+    }
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--navy);
+    }
+    .card-navy h3 { color: var(--gold); }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+    .card-navy p { color: var(--gray-300); }
+
+    /* ─── Grid Layouts ─────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+
+    /* ─── Feature Status Badges ────────────────────────── */
+    .badge-live {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(78,205,196,0.15);
+      color: var(--teal);
+      border: 1px solid rgba(78,205,196,0.3);
+    }
+    .badge-foundation {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(247,184,68,0.15);
+      color: var(--gold-dark);
+      border: 1px solid rgba(247,184,68,0.3);
+    }
+    .badge-planned {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(107,114,128,0.1);
+      color: var(--gray-500);
+      border: 1px solid var(--gray-300);
+    }
+
+    /* ─── Tables ───────────────────────────────────────── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .data-table thead th {
+      background: var(--navy);
+      color: var(--white);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .data-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .data-table thead th:last-child { border-radius: 0 8px 0 0; }
+    .data-table tbody td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .data-table tbody tr:nth-child(even) { background: var(--gray-50); }
+    .data-table tbody tr:hover { background: rgba(247,184,68,0.05); }
+    .data-table code {
+      background: var(--gray-100);
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      color: var(--navy);
+    }
+
+    /* ─── Diagram Components ───────────────────────────── */
+    .diagram {
+      padding: 2rem;
+      background: var(--gray-50);
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      overflow-x: auto;
+    }
+    .diagram-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    /* Diagram boxes */
+    .d-box {
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      position: relative;
+    }
+    .d-box-navy { border-color: var(--navy); background: var(--navy); color: var(--white); }
+    .d-box-gold { border-color: var(--gold); background: rgba(247,184,68,0.1); }
+    .d-box-teal { border-color: var(--teal); background: rgba(78,205,196,0.1); }
+    .d-box-coral { border-color: var(--coral); background: rgba(255,107,107,0.1); }
+    .d-box-gray { border-color: var(--gray-400); background: var(--gray-100); }
+
+    .d-box-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-500);
+      margin-bottom: 0.25rem;
+    }
+    .d-box-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .d-box-sub {
+      font-size: 0.7rem;
+      color: var(--gray-500);
+      margin-top: 0.15rem;
+    }
+
+    /* Arrow connectors */
+    .d-arrow-down {
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem 0;
+    }
+    .d-arrow-down::after {
+      content: '▼';
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+    .d-arrow-right {
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+    }
+    .d-arrow-right::after {
+      content: '▶';
+      color: var(--gold);
+      font-size: 0.8rem;
+    }
+    .d-arrow-label {
+      font-size: 0.6rem;
+      color: var(--gray-500);
+      text-align: center;
+      margin-top: -0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* ─── Architecture Diagram ─────────────────────────── */
+    .arch-diagram {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    .arch-column {
+      background: var(--white);
+      border-radius: 12px;
+      border: 2px solid var(--gray-200);
+      overflow: hidden;
+    }
+    .arch-column-header {
+      padding: 0.75rem 1rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+    .arch-column-header.col-vercel { background: var(--navy); color: var(--white); }
+    .arch-column-header.col-supabase { background: var(--teal); color: var(--white); }
+    .arch-column-header.col-flyio { background: var(--gold); color: var(--navy); }
+    .arch-column-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .arch-service {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.75rem;
+    }
+    .arch-service strong {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 0.15rem;
+    }
+    .arch-service span {
+      color: var(--gray-500);
+      font-size: 0.7rem;
+    }
+
+    /* ─── Pipeline Diagram ─────────────────────────────── */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 1rem 0;
+    }
+    .pipeline-node {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 600px;
+    }
+    .pipeline-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .pipeline-content {
+      flex: 1;
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+    .pipeline-content h4 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .pipeline-content p {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-top: 0.15rem;
+    }
+    .pipeline-connector {
+      width: 2px;
+      height: 24px;
+      background: var(--gold);
+      margin-left: 17px;
+    }
+    .pipeline-loop {
+      max-width: 600px;
+      width: 100%;
+      border: 2px dashed var(--coral);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+    .pipeline-loop-label {
+      position: absolute;
+      top: -0.6rem;
+      right: 1rem;
+      background: var(--coral);
+      color: var(--white);
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 0.1rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ─── ERD (Entity Relationship Diagram) ─────────────── */
+    .erd {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      padding: 1rem 0;
+    }
+    .erd-table {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid var(--gray-300);
+      font-size: 0.75rem;
+      background: var(--white);
+    }
+    .erd-table-header {
+      padding: 0.5rem 0.75rem;
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: var(--white);
+    }
+    .erd-table-header.erd-core { background: var(--navy); }
+    .erd-table-header.erd-intel { background: var(--teal); }
+    .erd-table-header.erd-billing { background: var(--gold); color: var(--navy); }
+    .erd-table-header.erd-system { background: var(--gray-500); }
+    .erd-table-header.erd-content { background: var(--navy-lighter); }
+    .erd-table-row {
+      padding: 0.3rem 0.75rem;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .erd-table-row:last-child { border-bottom: none; }
+    .erd-col-name { font-weight: 500; color: var(--gray-700); }
+    .erd-col-type { font-size: 0.65rem; color: var(--gray-400); font-family: monospace; }
+    .erd-fk {
+      font-size: 0.6rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+    .erd-pk {
+      font-size: 0.6rem;
+      color: var(--teal);
+      font-weight: 600;
+    }
+    .erd-span-2 { grid-column: span 2; }
+    .erd-span-3 { grid-column: span 3; }
+    .erd-span-4 { grid-column: span 4; }
+
+    /* ─── Grade Badges ─────────────────────────────────── */
+    .grade-card {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+    .grade-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .grade-a { background: rgba(78,205,196,0.15); color: var(--teal); border: 2px solid var(--teal); }
+    .grade-b { background: rgba(247,184,68,0.15); color: var(--gold-dark); border: 2px solid var(--gold); }
+    .grade-c { background: rgba(255,107,107,0.15); color: var(--coral); border: 2px solid var(--coral); }
+    .grade-info h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .grade-info p {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── Tech Stack Cards ─────────────────────────────── */
+    .tech-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .tech-card:hover { border-color: var(--gold); }
+    .tech-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .tech-card h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.15rem;
+    }
+    .tech-card .tech-role {
+      font-size: 0.7rem;
+      color: var(--gold-dark);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .tech-card p {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      line-height: 1.5;
+    }
+
+    /* ─── Decision Table ───────────────────────────────── */
+    .decision-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 10px 10px 0;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .decision-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .decision-card .decision-meta {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+    }
+    .decision-card .decision-meta span {
+      color: var(--gray-500);
+    }
+    .decision-card .decision-meta strong {
+      color: var(--teal);
+    }
+    .decision-card p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ─── Callout Boxes ────────────────────────────────── */
+    .callout {
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .callout-gold {
+      background: rgba(247,184,68,0.1);
+      border: 1px solid rgba(247,184,68,0.3);
+      color: var(--gray-700);
+    }
+    .callout-teal {
+      background: rgba(78,205,196,0.1);
+      border: 1px solid rgba(78,205,196,0.3);
+      color: var(--gray-700);
+    }
+    .callout-coral {
+      background: rgba(255,107,107,0.1);
+      border: 1px solid rgba(255,107,107,0.3);
+      color: var(--gray-700);
+    }
+    .callout strong { color: var(--navy); }
+
+    /* ─── Stat Row ─────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      padding: 2rem 0;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.25rem;
+    }
+
+    /* ─── FAQ ──────────────────────────────────────────── */
+    .faq-item {
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1.5rem 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .faq-a {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      line-height: 1.7;
+    }
+
+    /* ─── Flywheel Diagram ─────────────────────────────── */
+    .flywheel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .flywheel-ring {
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      border: 3px solid var(--gray-200);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .flywheel-center {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.3;
+      z-index: 2;
+    }
+    .flywheel-center .fw-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .flywheel-node {
+      position: absolute;
+      width: 110px;
+      padding: 0.6rem;
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .flywheel-node strong {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--navy);
+      margin-bottom: 0.15rem;
+    }
+    .flywheel-node span { color: var(--gray-500); }
+    .fw-top { top: -30px; left: 50%; transform: translateX(-50%); border-color: var(--teal); }
+    .fw-right { right: -40px; top: 50%; transform: translateY(-50%); border-color: var(--gold); }
+    .fw-bottom { bottom: -30px; left: 50%; transform: translateX(-50%); border-color: var(--coral); }
+    .fw-left { left: -40px; top: 50%; transform: translateY(-50%); border-color: var(--navy); }
+    .fw-top-right { top: 30px; right: -20px; border-color: var(--teal); }
+    .fw-bottom-right { bottom: 30px; right: -20px; border-color: var(--gold); }
+    .fw-bottom-left { bottom: 30px; left: -20px; border-color: var(--coral); }
+    .fw-top-left { top: 30px; left: -20px; border-color: var(--navy); }
+
+    /* ─── Tier Table ────────────────────────────────────── */
+    .tier-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tier-table th {
+      padding: 1rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 3px solid var(--gold);
+    }
+    .tier-table th:first-child { text-align: left; }
+    .tier-table th.tier-highlight {
+      background: rgba(247,184,68,0.1);
+    }
+    .tier-table td {
+      padding: 0.75rem 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .tier-table td:first-child {
+      text-align: left;
+      font-weight: 500;
+      color: var(--navy);
+    }
+    .tier-table .check { color: var(--teal); font-weight: 700; }
+    .tier-table .dash { color: var(--gray-300); }
+
+    /* ─── Roadmap Timeline ─────────────────────────────── */
+    .roadmap {
+      position: relative;
+      padding-left: 3rem;
+    }
+    .roadmap::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--gray-200);
+    }
+    .roadmap-item {
+      position: relative;
+      margin-bottom: 2rem;
+      padding-left: 1rem;
+    }
+    .roadmap-item::before {
+      content: '';
+      position: absolute;
+      left: -2.35rem;
+      top: 0.4rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      background: var(--white);
+    }
+    .roadmap-item.roadmap-active::before {
+      background: var(--gold);
+    }
+    .roadmap-item h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .roadmap-item .roadmap-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+    }
+    .roadmap-item p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── Code Blocks ──────────────────────────────────── */
+    .code-block {
+      background: var(--navy);
+      color: var(--gray-300);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    .code-block .code-comment { color: var(--gray-500); }
+    .code-block .code-key { color: var(--gold); }
+    .code-block .code-value { color: var(--teal); }
+    .code-block .code-type { color: var(--coral); }
+
+    /* ─── Horizontal Flow ──────────────────────────────── */
+    .h-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 1rem 0;
+    }
+    .h-flow-node {
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: center;
+      min-width: 100px;
+    }
+    .h-flow-arrow {
+      font-size: 1.2rem;
+      color: var(--gold);
+      padding: 0 0.5rem;
+    }
+
+    /* ─── Lesson Cards ─────────────────────────────────── */
+    .lesson {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .lesson-num {
+      width: 32px;
+      height: 32px;
+      background: var(--navy);
+      color: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+    .lesson-content h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+    .lesson-content p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ─── Footer ───────────────────────────────────────── */
+    .footer {
+      background: var(--navy);
+      color: var(--gray-400);
+      text-align: center;
+      padding: 3rem 2rem;
+      font-size: 0.8rem;
+    }
+    .footer .footer-logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -2px;
+      margin-bottom: 0.5rem;
+    }
+    .footer .footer-logo span { color: var(--gold); }
+
+    /* ─── Print Styles ─────────────────────────────────── */
+    @media print {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .hero { min-height: auto; padding: 3rem 2rem; page-break-after: always; }
+      .section, .section-full { page-break-inside: avoid; padding: 2rem 1.5rem; }
+      .diagram { page-break-inside: avoid; }
+      body { font-size: 14px; }
+    }
+
+    /* ─── Responsive ───────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .erd { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 3rem 1.5rem; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .arch-diagram { grid-template-columns: 1fr; }
+      .stat-row { flex-wrap: wrap; gap: 1.5rem; }
+      .hero h1 { font-size: 1.8rem; }
+      .erd { grid-template-columns: 1fr; }
+      .erd-span-2, .erd-span-3, .erd-span-4 { grid-column: span 1; }
+      .flywheel-ring { width: 320px; height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SIDEBAR NAVIGATION                                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">B<span>.</span></div>
+    <div class="logo-sub">Platform Playbook</div>
+  </div>
+  <div class="sidebar-divider"></div>
+  <nav>
+    <a class="nav-group">Business</a>
+    <a href="#problem"><span class="nav-num">01</span> The Problem We Solve</a>
+    <a href="#requirements"><span class="nav-num">02</span> Business Requirements</a>
+    <a href="#features"><span class="nav-num">03</span> What We Built</a>
+
+    <a class="nav-group">Architecture</a>
+    <a href="#architecture"><span class="nav-num">04</span> Architecture Overview</a>
+    <a href="#tech-stack"><span class="nav-num">05</span> Tech Stack</a>
+    <a href="#decisions"><span class="nav-num">06</span> Design Decisions</a>
+    <a href="#database"><span class="nav-num">07</span> Database Architecture</a>
+
+    <a class="nav-group">Intelligence</a>
+    <a href="#brain"><span class="nav-num">08</span> Brain Service</a>
+    <a href="#intelligence"><span class="nav-num">09</span> Client Intelligence</a>
+    <a href="#jobs"><span class="nav-num">10</span> Job Architecture</a>
+
+    <a class="nav-group">Platform</a>
+    <a href="#auth"><span class="nav-num">11</span> Auth &amp; Multi-Tenancy</a>
+    <a href="#billing"><span class="nav-num">12</span> Billing Integration</a>
+    <a href="#cicd"><span class="nav-num">13</span> CI/CD Pipeline</a>
+
+    <a class="nav-group">Assessment</a>
+    <a href="#enterprise"><span class="nav-num">14</span> Enterprise Readiness</a>
+    <a href="#scorecard"><span class="nav-num">15</span> Architecture Grade</a>
+    <a href="#lessons"><span class="nav-num">16</span> Lessons Learned</a>
+    <a href="#faq"><span class="nav-num">17</span> FAQ</a>
+    <a href="#roadmap"><span class="nav-num">18</span> Roadmap</a>
+  </nav>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- MAIN CONTENT                                           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- ─── COVER / HERO ──────────────────────────────────── -->
+  <section class="hero" id="cover">
+    <div class="hero-logo">B<span>.</span></div>
+    <h1>Boots On The Ground AI</h1>
+    <div class="hero-sub">Platform Playbook</div>
+    <p class="hero-tagline">
+      A comprehensive technical and business reference for the AI-powered proposal generation platform built for small businesses.
+    </p>
+    <div class="hero-meta">
+      Aurora, Illinois &middot; v1.0 &middot; March 2026
+      <br>
+      <span class="badge">Confidential</span>
+    </div>
+  </section>
+
+  <!-- ─── 01. THE PROBLEM WE SOLVE ─────────────────────── -->
+  <section class="section" id="problem">
+    <div class="section-header">
+      <div class="section-num">Section 01</div>
+      <h2>The Problem We Solve</h2>
+      <div class="section-rule"></div>
+      <p>Small businesses lose deals because proposals take too long, sound generic, and carry no memory of what worked before.</p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 2rem;">
+      <div class="card card-accent">
+        <h3>4&ndash;8 Hours Per Proposal</h3>
+        <p>A solo consultant or small team spends half a workday writing each proposal manually. That's time not spent closing deals or delivering work.</p>
+      </div>
+      <div class="card card-accent">
+        <h3>No Memory, No Learning</h3>
+        <p>Every proposal starts from scratch. What worked for a similar client last quarter? What tone landed the deal? Nobody remembers, nobody tracks it.</p>
+      </div>
+      <div class="card card-accent">
+        <h3>Enterprise Tools Don't Fit</h3>
+        <p>PandaDoc, Proposify, and Qwilr cost $500+/mo, require team onboarding, and weren't built for AI-native workflows. Overkill for a 1-10 person shop.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-gold">
+      <strong>The gap:</strong> There's no proposal tool that's affordable for small businesses, learns from past deals, and generates genuinely strategic proposals — not just templates with variable fields. That's what we built.
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">&lt;2min</div>
+        <div class="stat-label">Generation Time</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7</div>
+        <div class="stat-label">AI Agents</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">API Endpoints</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Pricing Tiers</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 02. BUSINESS REQUIREMENTS ────────────────────── -->
+  <section class="section section-alt" id="requirements">
+    <div class="section-header">
+      <div class="section-num">Section 02</div>
+      <h2>Business Requirements</h2>
+      <div class="section-rule"></div>
+      <p>What the system must do, why it must do it, and the constraints that shaped every decision.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Multi-Tenant SaaS</h3>
+        <p>Every organization's data is completely isolated. One codebase, one database, infinite tenants. Row-Level Security enforced at the database layer — not application code.</p>
+      </div>
+      <div class="card">
+        <h3>AI That Matches Your Voice</h3>
+        <p>Generated proposals must sound like the business, not like ChatGPT. The system ingests org knowledge (voice, services, pricing philosophy) and uses it in every generation.</p>
+      </div>
+      <div class="card">
+        <h3>Intelligence That Compounds</h3>
+        <p>Each proposal teaches the system. Client psychographics, deal outcomes, and strategy patterns are stored and retrieved via vector search for future proposals.</p>
+      </div>
+      <div class="card">
+        <h3>Production-Grade Security</h3>
+        <p>Auth with JWT cookies, RLS on every table, rate limiting on every endpoint, audit logging on every action. No shortcuts, no "we'll add that later."</p>
+      </div>
+      <div class="card">
+        <h3>Tiered Billing</h3>
+        <p>Free tier for trial, paid tiers with real limits. Stripe-powered checkout, webhook-driven plan updates, usage tracking per org.</p>
+      </div>
+      <div class="card">
+        <h3>White-Label Ready</h3>
+        <p>Each org can customize branding — colors, logo, proposal templates. The platform itself is white-labelable from a single config file.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 03. WHAT WE BUILT ────────────────────────────── -->
+  <section class="section" id="features">
+    <div class="section-header">
+      <div class="section-num">Section 03</div>
+      <h2>What We Built</h2>
+      <div class="section-rule"></div>
+      <p>A complete feature inventory of the Boots Proposal System, organized by domain.</p>
+    </div>
+
+    <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-dark); margin-bottom: 1rem;">Document Generation</h3>
+    <div class="grid-3" style="margin-bottom: 2.5rem;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">AI Proposal Generation</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Multi-method creation: AI chat, notes-to-proposal, or brain pipeline. Full proposal with cover, summary, features, architecture, timeline, and pricing.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Contract Generation</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Generate service agreements from scratch or convert approved proposals. Legal section templates with customizable terms.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Report / Assessment</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Technical assessment reports with protocol parsing. Professional formatting with executive summary.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Rich Editors</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Full-featured editors for proposals, contracts, and reports with tabbed sections, live preview, image upload, and auto-save.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Template Builder</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Create and manage reusable templates. System templates across industries. Save any proposal as a template.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Public Share Links</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Generate shareable URLs for proposals, contracts, and reports. Read-only, no auth required, with view tracking.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-dark); margin-bottom: 1rem;">Intelligence Layer</h3>
+    <div class="grid-3" style="margin-bottom: 2.5rem;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Client Intelligence</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Psychographic profiles per client: preferred tone, key themes, risks, pricing strategy. Persisted across proposals with deal history.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Vector Search (pgvector)</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>OpenAI embeddings (1536-dim) stored in PostgreSQL. Cosine similarity search finds similar past clients to inform new proposals.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">7-Agent Brain Pipeline</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Context &rarr; Research &rarr; Strategist &rarr; Writer &rarr; Reviewer &rarr; Commit &rarr; Memory. Feedback loops, resume-from-step, and cached outputs.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Org Brain</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Knowledge base per org: voice guidance, service descriptions, pricing context, company profile. Feeds every AI generation.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Prospect Research</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Auto-scrapes prospect websites, extracts industry/services/tone profile, caches results. Never blocks the pipeline on failure.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Deal Outcome Tracking</h3>
+          <span class="badge-foundation">Foundation</span>
+        </div>
+        <p>Track won/lost/pending on proposals. Atomic update propagated to client intelligence deal history for future strategy.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-dark); margin-bottom: 1rem;">Platform &amp; Operations</h3>
+    <div class="grid-3" style="margin-bottom: 2rem;">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Multi-Tenant Auth</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Supabase Auth with JWT cookies, Google OAuth, email/password, OTP. Role hierarchy: owner &gt; admin &gt; member &gt; viewer.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Stripe Billing</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>4 tiers (free/starter/pro/enterprise). Checkout sessions, customer portal, webhook-driven plan updates, usage enforcement.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Audit Logging</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Every action logged: user, org, action type, resource, IP, user agent. Fire-and-forget — never crashes the main operation.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Rate Limiting</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Upstash Redis distributed rate limiting. Per-endpoint configs: AI generation (10/min), auth (10/min), standard (60/min).</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Error Tracking</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>Sentry on client, server, and edge. Source maps, full traces, console log forwarding. User-friendly error messages only.</p>
+      </div>
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="margin: 0;">Magic Onboarding</h3>
+          <span class="badge-live">Live</span>
+        </div>
+        <p>AI-powered onboarding: scrapes your website, extracts company profile, generates org brain entries. Ready to generate in minutes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 04. ARCHITECTURE OVERVIEW ────────────────────── -->
+  <section class="section section-alt" id="architecture">
+    <div class="section-header">
+      <div class="section-num">Section 04</div>
+      <h2>Architecture Overview</h2>
+      <div class="section-rule"></div>
+      <p>Three deployment targets, one shared database, zero single points of failure in the generation pipeline.</p>
+    </div>
+
+    <!-- System Architecture Diagram -->
+    <div class="diagram" style="margin-bottom: 2.5rem;">
+      <div class="diagram-title">System Architecture</div>
+      <div class="arch-diagram">
+        <!-- Vercel Column -->
+        <div class="arch-column">
+          <div class="arch-column-header col-vercel">Vercel &middot; IAD1</div>
+          <div class="arch-column-body">
+            <div class="arch-service">
+              <strong>Next.js 16 App</strong>
+              <span>App Router &middot; React 19 &middot; TypeScript</span>
+            </div>
+            <div class="arch-service">
+              <strong>50+ API Routes</strong>
+              <span>Auth &middot; CRUD &middot; AI &middot; Billing &middot; Admin</span>
+            </div>
+            <div class="arch-service">
+              <strong>Edge Middleware</strong>
+              <span>Auth gate &middot; Onboarding &middot; Rate limiting</span>
+            </div>
+            <div class="arch-service">
+              <strong>Rich Editors</strong>
+              <span>Proposal &middot; Contract &middot; Report</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supabase Column -->
+        <div class="arch-column">
+          <div class="arch-column-header col-supabase">Supabase &middot; Cloud</div>
+          <div class="arch-column-body">
+            <div class="arch-service">
+              <strong>PostgreSQL + RLS</strong>
+              <span>Multi-tenant isolation &middot; 25+ tables</span>
+            </div>
+            <div class="arch-service">
+              <strong>pgvector Extension</strong>
+              <span>1536-dim embeddings &middot; HNSW index</span>
+            </div>
+            <div class="arch-service">
+              <strong>Auth Service</strong>
+              <span>JWT &middot; OAuth &middot; OTP &middot; Cookie sessions</span>
+            </div>
+            <div class="arch-service">
+              <strong>Realtime</strong>
+              <span>Agent progress streaming to UI</span>
+            </div>
+            <div class="arch-service">
+              <strong>Storage</strong>
+              <span>Org logos &middot; Proposal images</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fly.io Column -->
+        <div class="arch-column">
+          <div class="arch-column-header col-flyio">Fly.io &middot; ORD</div>
+          <div class="arch-column-body">
+            <div class="arch-service">
+              <strong>boots-proposal-worker</strong>
+              <span>TypeScript &middot; Job processing &middot; Retry logic</span>
+            </div>
+            <div class="arch-service">
+              <strong>boots-brain</strong>
+              <span>Python FastAPI &middot; 7-agent pipeline</span>
+            </div>
+            <div class="arch-service" style="border: 1px dashed var(--gray-300); background: transparent;">
+              <strong style="color: var(--gray-500);">Shared State via Supabase</strong>
+              <span>Jobs table &middot; Agent runs &middot; Proposals</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- External Services -->
+    <div class="diagram">
+      <div class="diagram-title">External Service Integrations</div>
+      <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+        <div class="d-box d-box-coral" style="min-width: 140px;">
+          <div class="d-box-label">AI Models</div>
+          <div class="d-box-title">Anthropic Claude</div>
+          <div class="d-box-sub">Opus &middot; Sonnet &middot; Haiku</div>
+        </div>
+        <div class="d-box d-box-coral" style="min-width: 140px;">
+          <div class="d-box-label">Embeddings</div>
+          <div class="d-box-title">OpenAI</div>
+          <div class="d-box-sub">text-embedding-3-small</div>
+        </div>
+        <div class="d-box d-box-coral" style="min-width: 140px;">
+          <div class="d-box-label">Payments</div>
+          <div class="d-box-title">Stripe</div>
+          <div class="d-box-sub">Checkout &middot; Webhooks</div>
+        </div>
+        <div class="d-box d-box-coral" style="min-width: 140px;">
+          <div class="d-box-label">Rate Limiting</div>
+          <div class="d-box-title">Upstash Redis</div>
+          <div class="d-box-sub">Distributed &middot; IP-based</div>
+        </div>
+        <div class="d-box d-box-coral" style="min-width: 140px;">
+          <div class="d-box-label">Errors</div>
+          <div class="d-box-title">Sentry</div>
+          <div class="d-box-sub">Client &middot; Server &middot; Edge</div>
+        </div>
+        <div class="d-box d-box-coral" style="min-width: 140px;">
+          <div class="d-box-label">Email</div>
+          <div class="d-box-title">Resend</div>
+          <div class="d-box-sub">Transactional &middot; Leads</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request Flow -->
+    <div style="margin-top: 2.5rem;">
+      <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-dark); margin-bottom: 1rem;">Request Flow: Proposal Generation</h3>
+      <div class="diagram">
+        <div class="h-flow">
+          <div class="h-flow-node d-box-navy" style="background: var(--navy); color: var(--white);">User clicks<br>"Generate"</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node">Middleware<br>Auth Gate</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node">API Route<br>Rate Limit</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node" style="border-color: var(--teal);">Insert Job<br>to Supabase</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node" style="border-color: var(--gold);">Worker/Brain<br>Claims Job</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node" style="border-color: var(--gold);">7-Agent<br>Pipeline</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node" style="border-color: var(--teal);">Save Result<br>to Supabase</div>
+          <div class="h-flow-arrow">&rarr;</div>
+          <div class="h-flow-node d-box-navy" style="background: var(--navy); color: var(--white);">UI Updates<br>via Realtime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 05. TECH STACK ───────────────────────────────── -->
+  <section class="section" id="tech-stack">
+    <div class="section-header">
+      <div class="section-num">Section 05</div>
+      <h2>Tech Stack</h2>
+      <div class="section-rule"></div>
+      <p>Every technology was chosen for a specific reason. No resume-driven development.</p>
+    </div>
+
+    <div class="grid-4">
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(21,33,52,0.1); color: var(--navy);">N</div>
+        <h4>Next.js 16</h4>
+        <div class="tech-role">Framework</div>
+        <p>App Router, React Server Components, streaming, edge middleware, Turbopack. The full-stack React framework.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(78,205,196,0.15); color: var(--teal);">S</div>
+        <h4>Supabase</h4>
+        <div class="tech-role">Database + Auth</div>
+        <p>PostgreSQL with RLS, pgvector, Realtime, Auth, Storage. One platform replaces 5 services.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(247,184,68,0.15); color: var(--gold-dark);">P</div>
+        <h4>Python FastAPI</h4>
+        <div class="tech-role">Brain Service</div>
+        <p>Multi-agent orchestration, async pipeline, ML ecosystem access. Where TypeScript doesn't fit.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(255,107,107,0.15); color: var(--coral);">C</div>
+        <h4>Claude (Anthropic)</h4>
+        <div class="tech-role">AI Models</div>
+        <p>Opus for strategy, Sonnet for writing, Haiku for validation. Multi-model by design.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(78,205,196,0.15); color: var(--teal);">V</div>
+        <h4>pgvector</h4>
+        <div class="tech-role">Vector Search</div>
+        <p>Embeddings in PostgreSQL. No separate vector DB. HNSW index for fast cosine similarity.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(247,184,68,0.15); color: var(--gold-dark);">$</div>
+        <h4>Stripe</h4>
+        <div class="tech-role">Billing</div>
+        <p>Checkout sessions, subscription management, webhook-driven plan updates. Test mode ready.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(21,33,52,0.1); color: var(--navy);">F</div>
+        <h4>Fly.io</h4>
+        <div class="tech-role">Worker Hosting</div>
+        <p>Docker containers with no timeout limits. Background jobs that run for 5+ minutes. ORD region.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-icon" style="background: rgba(255,107,107,0.15); color: var(--coral);">G</div>
+        <h4>GitHub Actions</h4>
+        <div class="tech-role">CI/CD</div>
+        <p>Automated quality gates: lint, typecheck, test, build. Conditional deploys to Vercel + Fly.io.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 06. DESIGN DECISIONS ─────────────────────────── -->
+  <section class="section section-alt" id="decisions">
+    <div class="section-header">
+      <div class="section-num">Section 06</div>
+      <h2>Design Decisions</h2>
+      <div class="section-rule"></div>
+      <p>The "why" behind every architectural choice. These aren't arbitrary — each one solved a real problem.</p>
+    </div>
+
+    <div class="decision-card">
+      <h4>TypeScript for the Web App, Python for the Brain</h4>
+      <div class="decision-meta">
+        <span>Options: <strong>All TypeScript</strong> vs <strong>Hybrid TS + Python</strong></span>
+      </div>
+      <p>The brain service orchestrates 7 agents with complex state management, async execution, and structured JSON output. Python's Anthropic SDK, asyncio, and the ML ecosystem (embeddings, NLP) are significantly more mature for this use case. The web app, API routes, and worker stay TypeScript for type-safe React and shared types with the database. They communicate via Supabase as shared state — no direct HTTP calls between services.</p>
+    </div>
+
+    <div class="decision-card">
+      <h4>Supabase over Firebase / Prisma / Raw PostgreSQL</h4>
+      <div class="decision-meta">
+        <span>Options: <strong>Firebase</strong> vs <strong>Prisma + PG</strong> vs <strong>Supabase</strong></span>
+      </div>
+      <p>Supabase gives us PostgreSQL with RLS for multi-tenancy, pgvector for embeddings, Realtime for streaming agent progress, Auth for user management, and Storage for file uploads — all in one platform. Firebase lacks RLS and pgvector. Prisma adds an ORM layer we don't need when Supabase's client SDK is type-safe from generated types.</p>
+    </div>
+
+    <div class="decision-card">
+      <h4>pgvector in Supabase over Pinecone / Weaviate</h4>
+      <div class="decision-meta">
+        <span>Options: <strong>Separate vector DB</strong> vs <strong>pgvector extension</strong></span>
+      </div>
+      <p>Our vector data (client intelligence embeddings) is tightly coupled to relational data (org_id, client_name, deal_history). A separate vector DB means syncing two databases. pgvector keeps vectors in the same PostgreSQL instance, queried with the same RLS policies, in the same transaction. At our scale (&lt;100K vectors per org), HNSW index performance is more than sufficient.</p>
+    </div>
+
+    <div class="decision-card">
+      <h4>Separate Brain Service over In-Worker Agents</h4>
+      <div class="decision-meta">
+        <span>Options: <strong>Agents in TS worker</strong> vs <strong>Dedicated Python brain</strong></span>
+      </div>
+      <p>The 7-agent pipeline needs 60-300 seconds and complex state management (resume-from-step, cached outputs, feedback loops). Running this in the TypeScript worker would require reimplementing Python's asyncio patterns and the Anthropic Python SDK's superior structured output support. The brain polls Supabase independently — if it goes down, the worker still processes simple jobs.</p>
+    </div>
+
+    <div class="decision-card">
+      <h4>Poll-Based Job Queue over Message Broker</h4>
+      <div class="decision-meta">
+        <span>Options: <strong>RabbitMQ / SQS</strong> vs <strong>PostgreSQL polling</strong></span>
+      </div>
+      <p>Both the worker and brain poll Supabase using <code>FOR UPDATE SKIP LOCKED</code> — an atomic claim pattern that prevents duplicate processing and supports horizontal scaling. No message broker to manage, no dead letter queues to monitor, no additional infrastructure. The jobs table IS the queue. Debuggable with a SQL query.</p>
+    </div>
+
+    <div class="decision-card">
+      <h4>Return-Based Auth Errors over Throw-Based</h4>
+      <div class="decision-meta">
+        <span>Options: <strong>throw new AuthError()</strong> vs <strong>return Response(401)</strong></span>
+      </div>
+      <p><code>requireSession()</code> returns <code>SessionContext | Response</code>. API routes check <code>if (ctx instanceof Response) return ctx</code>. This eliminates try/catch boilerplate, makes the error path explicit in the type system, and prevents unhandled auth errors from leaking stack traces.</p>
+    </div>
+
+    <!-- Language Boundary Diagram -->
+    <div class="diagram" style="margin-top: 2rem;">
+      <div class="diagram-title">Language Boundary Map</div>
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items: start;">
+        <div>
+          <div style="text-align: center; font-weight: 600; color: var(--navy); margin-bottom: 1rem; font-size: 0.85rem;">TypeScript</div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div class="d-box" style="border-color: var(--navy);">Next.js App (Vercel)</div>
+            <div class="d-box" style="border-color: var(--navy);">50+ API Routes</div>
+            <div class="d-box" style="border-color: var(--navy);">Edge Middleware</div>
+            <div class="d-box" style="border-color: var(--navy);">Worker (Fly.io)</div>
+            <div class="d-box" style="border-color: var(--navy);">React Components</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding-top: 2rem;">
+          <div style="width: 2px; height: 100%; background: var(--gold); position: relative; min-height: 250px;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--gold); color: var(--navy); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.65rem; font-weight: 600; white-space: nowrap;">SUPABASE<br>SHARED STATE</div>
+          </div>
+        </div>
+        <div>
+          <div style="text-align: center; font-weight: 600; color: var(--gold-dark); margin-bottom: 1rem; font-size: 0.85rem;">Python</div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div class="d-box" style="border-color: var(--gold);">FastAPI Brain (Fly.io)</div>
+            <div class="d-box" style="border-color: var(--gold);">7-Agent Orchestrator</div>
+            <div class="d-box" style="border-color: var(--gold);">Memory Manager</div>
+            <div class="d-box" style="border-color: var(--gold);">Embedding Generator</div>
+            <div class="d-box" style="border-color: var(--gold);">Prospect Scraper</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 07. DATABASE ARCHITECTURE ────────────────────── -->
+  <section class="section" id="database">
+    <div class="section-header">
+      <div class="section-num">Section 07</div>
+      <h2>Database Architecture</h2>
+      <div class="section-rule"></div>
+      <p>25+ tables, Row-Level Security on every one, pgvector for embeddings. Color-coded by domain.</p>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem;">
+        <div style="width: 14px; height: 14px; background: var(--navy); border-radius: 3px;"></div>
+        <span>Core / Auth</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem;">
+        <div style="width: 14px; height: 14px; background: var(--navy-lighter); border-radius: 3px;"></div>
+        <span>Content</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem;">
+        <div style="width: 14px; height: 14px; background: var(--teal); border-radius: 3px;"></div>
+        <span>Intelligence</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem;">
+        <div style="width: 14px; height: 14px; background: var(--gold); border-radius: 3px;"></div>
+        <span>Billing</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem;">
+        <div style="width: 14px; height: 14px; background: var(--gray-500); border-radius: 3px;"></div>
+        <span>System</span>
+      </div>
+    </div>
+
+    <!-- ERD Diagram -->
+    <div class="diagram" style="padding: 1.5rem;">
+      <div class="diagram-title">Entity Relationship Diagram</div>
+      <div class="erd">
+
+        <!-- Auth / Core Tables -->
+        <div class="erd-table">
+          <div class="erd-table-header erd-core">organizations</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">name</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">plan</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">branding</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">stripe_customer_id</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">chatbot_instructions</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-core">profiles</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">email</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">full_name</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">phone</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">onboarding_complete</span> <span class="erd-col-type">bool</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-core">org_members</div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">user_id</span> <span class="erd-fk">FK &rarr; profiles</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">role</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">invited_by</span> <span class="erd-col-type">uuid</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-core">clients</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">name</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">email, phone</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">status</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <!-- Content Tables -->
+        <div class="erd-table">
+          <div class="erd-table-header erd-content">proposals</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">client_id</span> <span class="erd-fk">FK &rarr; clients</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">title, status, slug</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">executive_summary</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">features, tech_stack</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">brain_status</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">deal_outcome</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-content">contracts</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">client_name</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">title, status, slug</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">scope, terms</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-content">templates</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">name, type</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">content</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">is_system</span> <span class="erd-col-type">bool</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-content">services</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">name</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">description</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <!-- Intelligence Tables -->
+        <div class="erd-table">
+          <div class="erd-table-header erd-intel">client_intelligence</div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">client_name</span> <span class="erd-col-type">text (UNIQUE)</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">psychographics</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">deal_history</span> <span class="erd-col-type">jsonb[]</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">embedding</span> <span class="erd-col-type">vector(1536)</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-intel">org_brain</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">content_type</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">content_text</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">embedding</span> <span class="erd-col-type">vector(1536)</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-intel">agent_runs</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">proposal_id</span> <span class="erd-fk">FK &rarr; proposals</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">status, current_step</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">internal_log</span> <span class="erd-col-type">jsonb[]</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">cached_writer_output</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">resume_from</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-intel">prospect_intelligence</div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">prospect_name</span> <span class="erd-col-type">text (UNIQUE)</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">website_url</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">profile</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">cached_at</span> <span class="erd-col-type">timestamptz</span></div>
+        </div>
+
+        <!-- System Tables -->
+        <div class="erd-table">
+          <div class="erd-table-header erd-system">jobs</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">job_type</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">status</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">payload, result</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">actual_tokens</span> <span class="erd-col-type">int</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-system">audit_log</div>
+          <div class="erd-table-row"><span class="erd-col-name">user_id</span> <span class="erd-fk">FK &rarr; profiles</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">action</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">resource_type</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">ip, user_agent</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-system">system_settings</div>
+          <div class="erd-table-row"><span class="erd-col-name">key</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">value</span> <span class="erd-col-type">jsonb</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">description</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+        <div class="erd-table">
+          <div class="erd-table-header erd-billing">invoices</div>
+          <div class="erd-table-row"><span class="erd-col-name">id</span> <span class="erd-pk">PK</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">org_id</span> <span class="erd-fk">FK &rarr; organizations</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">stripe_invoice_id</span> <span class="erd-col-type">text</span></div>
+          <div class="erd-table-row"><span class="erd-col-name">amount, status</span> <span class="erd-col-type">text</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RLS Explanation -->
+    <div class="callout callout-teal" style="margin-top: 2rem;">
+      <strong>Row-Level Security (RLS):</strong> Every table has RLS policies that filter by <code>org_id</code>. When a user queries proposals, they only see their organization's proposals — enforced at the database layer, not application code. Even a bug in the API route can't leak data across tenants.
+    </div>
+  </section>
+
+  <!-- ─── 08. BRAIN SERVICE ────────────────────────────── -->
+  <section class="section section-alt" id="brain">
+    <div class="section-header">
+      <div class="section-num">Section 08</div>
+      <h2>Brain Service &mdash; Multi-Agent Orchestration</h2>
+      <div class="section-rule"></div>
+      <p>A 7-agent Python pipeline that researches prospects, builds strategy, writes proposals, self-reviews, and remembers what it learned.</p>
+    </div>
+
+    <!-- Agent Pipeline Diagram -->
+    <div class="diagram" style="margin-bottom: 2.5rem;">
+      <div class="diagram-title">Agent Pipeline Flow</div>
+      <div class="pipeline">
+
+        <div class="pipeline-node">
+          <div class="pipeline-num">1</div>
+          <div class="pipeline-content" style="border-color: var(--teal);">
+            <h4>Context Node</h4>
+            <p>Loads org brain, client intelligence (psychographics + deal history), runs pgvector similarity search for similar past clients. Detects cold start vs returning client.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-num">2</div>
+          <div class="pipeline-content" style="border-color: var(--teal);">
+            <h4>Research Node</h4>
+            <p>Scrapes prospect website via Jina Reader. Extracts industry, services, tone, size signals, differentiator. Caches in prospect_intelligence. Never blocks pipeline on failure.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-num">3</div>
+          <div class="pipeline-content" style="border-color: var(--gold);">
+            <h4>Strategist Node</h4>
+            <p>Claude Sonnet analyzes all context: client history + research + org knowledge. Outputs: positioning, tone, key_themes, pricing_strategy, risks_to_address. The strategic brain.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-loop">
+          <div class="pipeline-loop-label">Feedback Loop</div>
+          <div class="pipeline-node" style="margin-bottom: 0.75rem;">
+            <div class="pipeline-num">4</div>
+            <div class="pipeline-content" style="border-color: var(--gold);">
+              <h4>Writer Node</h4>
+              <p>Claude Sonnet generates full ProposalData JSON: cover, summary, problem, features, architecture, tech stack, timeline, pricing, about, next steps. Matches org voice from brain.</p>
+            </div>
+          </div>
+          <div class="pipeline-connector" style="margin-left: 17px;"></div>
+          <div class="pipeline-node">
+            <div class="pipeline-num">5</div>
+            <div class="pipeline-content" style="border-color: var(--coral);">
+              <h4>Reviewer Node</h4>
+              <p>Claude Haiku validates completeness against proposal heuristics. Flags embarrassing gaps. Soft pass on parse failure — never blocks delivery. Loops back to Writer if gaps found.</p>
+            </div>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-num">6</div>
+          <div class="pipeline-content">
+            <h4>Commit Node</h4>
+            <p>Writes final proposal JSON to Supabase. Sets brain_status = 'content_generated'. Marks needs_human_review if reviewer didn't pass.</p>
+          </div>
+        </div>
+        <div class="pipeline-connector"></div>
+
+        <div class="pipeline-node">
+          <div class="pipeline-num">7</div>
+          <div class="pipeline-content" style="border-color: var(--teal);">
+            <h4>Memory Node</h4>
+            <p>Non-fatal write-back. Upserts client_intelligence with psychographics and deal entry. Generates OpenAI embedding for future vector search. Pipeline succeeds even if this fails.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Production Safety -->
+    <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-dark); margin-bottom: 1rem;">Production Safety Patterns</h3>
+    <div class="grid-2">
+      <div class="card card-accent">
+        <h3>300s Wall-Clock Timeout</h3>
+        <p>The entire pipeline is wrapped in <code>asyncio.wait_for()</code> with a 300-second hard limit. If any agent hangs, the pipeline is killed cleanly.</p>
+      </div>
+      <div class="card card-accent">
+        <h3>Resume-From-Step</h3>
+        <p>Writer output is cached in <code>cached_writer_output</code>. If the reviewer or commit fails, the next attempt skips directly to the cached checkpoint.</p>
+      </div>
+      <div class="card card-accent">
+        <h3>Non-Fatal Memory</h3>
+        <p>The Memory Node runs after the proposal is committed. If embedding generation or intelligence upsert fails, the proposal is still delivered.</p>
+      </div>
+      <div class="card card-accent">
+        <h3>Atomic Job Claiming</h3>
+        <p><code>FOR UPDATE SKIP LOCKED</code> prevents duplicate processing. Multiple brain instances can poll simultaneously without conflict.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-gold" style="margin-top: 1.5rem;">
+      <strong>Multi-Model Strategy:</strong> The brain uses different Claude models for different tasks. Sonnet for writing and strategy (creative, long-form). Haiku for review (fast validation, 80% cheaper). This optimizes for both quality and cost.
+    </div>
+  </section>
+
+  <!-- ─── 09. CLIENT INTELLIGENCE ──────────────────────── -->
+  <section class="section" id="intelligence">
+    <div class="section-header">
+      <div class="section-num">Section 09</div>
+      <h2>Client Intelligence &mdash; Memory That Compounds</h2>
+      <div class="section-rule"></div>
+      <p>Every proposal teaches the system. Client psychographics, deal outcomes, and strategy patterns are stored and retrieved via vector search.</p>
+    </div>
+
+    <!-- Intelligence Flywheel -->
+    <div class="diagram" style="margin-bottom: 2.5rem;">
+      <div class="diagram-title">Intelligence Flywheel</div>
+      <div class="flywheel">
+        <div class="flywheel-ring">
+          <div class="flywheel-center">
+            <div class="fw-icon">B<span style="color: var(--gold);">.</span></div>
+            Client<br>Intelligence
+          </div>
+
+          <div class="flywheel-node fw-top">
+            <strong>Generate Proposal</strong>
+            <span>Brain pipeline runs</span>
+          </div>
+          <div class="flywheel-node fw-top-right">
+            <strong>Extract Psychographics</strong>
+            <span>Tone, themes, strategy</span>
+          </div>
+          <div class="flywheel-node fw-right">
+            <strong>Store + Embed</strong>
+            <span>pgvector 1536-dim</span>
+          </div>
+          <div class="flywheel-node fw-bottom-right">
+            <strong>Track Outcome</strong>
+            <span>Won / Lost / Pending</span>
+          </div>
+          <div class="flywheel-node fw-bottom">
+            <strong>Next Proposal</strong>
+            <span>Same or similar client</span>
+          </div>
+          <div class="flywheel-node fw-bottom-left">
+            <strong>Vector Search</strong>
+            <span>Find similar clients</span>
+          </div>
+          <div class="flywheel-node fw-left">
+            <strong>Load History</strong>
+            <span>Prior deals inform strategy</span>
+          </div>
+          <div class="flywheel-node fw-top-left">
+            <strong>Smarter Strategy</strong>
+            <span>Personalized positioning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Model -->
+    <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-dark); margin-bottom: 1rem;">Data Model</h3>
+    <div class="grid-2" style="margin-bottom: 2rem;">
+      <div class="card">
+        <h3>Psychographics (JSONB)</h3>
+        <div class="code-block" style="margin-top: 0.75rem;">
+<span class="code-key">"preferred_tone"</span>: <span class="code-value">"professional but approachable"</span>
+<span class="code-key">"key_themes"</span>: [<span class="code-value">"scalability"</span>, <span class="code-value">"cost savings"</span>]
+<span class="code-key">"risks_noted"</span>: [<span class="code-value">"budget conscious"</span>]
+<span class="code-key">"pricing_strategy_used"</span>: <span class="code-value">"value-based"</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Deal History (JSONB Array)</h3>
+        <div class="code-block" style="margin-top: 0.75rem;">
+[{
+  <span class="code-key">"proposal_id"</span>: <span class="code-value">"uuid-abc..."</span>,
+  <span class="code-key">"date"</span>: <span class="code-value">"2026-03-15"</span>,
+  <span class="code-key">"positioning"</span>: <span class="code-value">"technical partner"</span>,
+  <span class="code-key">"key_themes"</span>: [<span class="code-value">"automation"</span>],
+  <span class="code-key">"outcome"</span>: <span class="code-value">"won"</span>
+}]
+        </div>
+      </div>
+    </div>
+
+    <!-- Vector Search -->
+    <div class="callout callout-teal">
+      <strong>How vector search works:</strong> When a new proposal is created, the brain calls <code>match_client_intelligence()</code> with the requirements text embedded via OpenAI's text-embedding-3-small (1536 dimensions). PostgreSQL's pgvector extension finds the most similar past clients using cosine similarity, returning their psychographics and deal history. The strategist uses this to personalize the approach.
+    </div>
+
+    <div class="grid-3" style="margin-top: 1.5rem;">
+      <div class="card" style="text-align: center; border-top: 3px solid var(--coral);">
+        <h3 style="color: var(--coral);">Day 1</h3>
+        <p>Cold start. No history. Generic but on-brand proposal using org brain knowledge.</p>
+      </div>
+      <div class="card" style="text-align: center; border-top: 3px solid var(--gold);">
+        <h3 style="color: var(--gold-dark);">Day 30</h3>
+        <p>5 proposals generated. Vector search finds similar clients. Strategy starts personalizing.</p>
+      </div>
+      <div class="card" style="text-align: center; border-top: 3px solid var(--teal);">
+        <h3 style="color: var(--teal);">Day 90</h3>
+        <p>Returning client with full context. Knows their tone, themes, what won before. Near-automatic.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 10. JOB ARCHITECTURE ─────────────────────────── -->
+  <section class="section section-alt" id="jobs">
+    <div class="section-header">
+      <div class="section-num">Section 10</div>
+      <h2>Job Architecture</h2>
+      <div class="section-rule"></div>
+      <p>Two job processors, one shared queue in PostgreSQL, atomic claiming, and production-grade reliability.</p>
+    </div>
+
+    <div class="diagram" style="margin-bottom: 2rem;">
+      <div class="diagram-title">Job Lifecycle State Machine</div>
+      <div class="h-flow">
+        <div class="h-flow-node" style="border-color: var(--gray-400); background: var(--gray-100);">Pending</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--gold);">Claimed</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--navy); background: var(--navy); color: white;">Processing</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div class="h-flow-node" style="border-color: var(--teal); background: rgba(78,205,196,0.1);">Completed</div>
+          <div class="h-flow-node" style="border-color: var(--coral); background: rgba(255,107,107,0.1);">Failed</div>
+          <div class="h-flow-node" style="border-color: var(--gray-400); background: var(--gray-100);">Cancelled</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card card-accent">
+        <h3>TypeScript Worker (Fly.io)</h3>
+        <p><strong>Job types:</strong> generate_proposal, generate_contract, parse_readme, extract_text</p>
+        <p style="margin-top: 0.5rem;"><strong>Polling:</strong> 100ms interval via <code>claim_next_job()</code> RPC</p>
+        <p style="margin-top: 0.5rem;"><strong>Timeout:</strong> 60s hard limit per job</p>
+        <p style="margin-top: 0.5rem;"><strong>Retry:</strong> Transient errors (rate_limit, timeout, ai_overloaded, network) auto-retry up to max_retries</p>
+      </div>
+      <div class="card card-accent">
+        <h3>Python Brain (Fly.io)</h3>
+        <p><strong>Job types:</strong> Brain proposals (7-agent pipeline)</p>
+        <p style="margin-top: 0.5rem;"><strong>Polling:</strong> <code>claim_next_brain_proposal()</code> RPC</p>
+        <p style="margin-top: 0.5rem;"><strong>Timeout:</strong> 300s wall-clock limit</p>
+        <p style="margin-top: 0.5rem;"><strong>Progress:</strong> Real-time updates via agent_runs table + Supabase Realtime</p>
+      </div>
+    </div>
+
+    <div class="callout callout-gold" style="margin-top: 1.5rem;">
+      <strong>Kill Switches:</strong> Three levels of circuit breakers. Global kill switch in system_settings stops all processing. Per-org kill switch stops one tenant. Per-job cancellation marks individual jobs. The worker checks every 5 seconds during processing.
+    </div>
+  </section>
+
+  <!-- ─── 11. AUTH & MULTI-TENANCY ─────────────────────── -->
+  <section class="section" id="auth">
+    <div class="section-header">
+      <div class="section-num">Section 11</div>
+      <h2>Auth &amp; Multi-Tenancy</h2>
+      <div class="section-rule"></div>
+      <p>Supabase Auth with JWT cookies, RLS-enforced tenant isolation, and a four-tier role hierarchy.</p>
+    </div>
+
+    <div class="diagram" style="margin-bottom: 2rem;">
+      <div class="diagram-title">Authentication Flow</div>
+      <div class="h-flow">
+        <div class="h-flow-node d-box-navy" style="background: var(--navy); color: white;">User Login</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node">Supabase Auth<br><span style="font-size: 0.7rem; color: var(--gray-500);">JWT + Cookie</span></div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node">Middleware<br><span style="font-size: 0.7rem; color: var(--gray-500);">getUser()</span></div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node">Profile +<br>Org Lookup</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--teal);">SessionContext<br><span style="font-size: 0.7rem; color: var(--gray-500);">userId, orgId, role</span></div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--teal);">RLS Filters<br><span style="font-size: 0.7rem; color: var(--gray-500);">by org_id</span></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 2rem;">
+      <div class="card">
+        <h3>Three Supabase Client Types</h3>
+        <table class="data-table" style="margin-top: 0.75rem;">
+          <thead><tr><th>Client</th><th>Used By</th><th>RLS</th></tr></thead>
+          <tbody>
+            <tr><td><code>createBrowserClient()</code></td><td>React components</td><td>Enforced</td></tr>
+            <tr><td><code>createSupabaseServer()</code></td><td>API routes, server components</td><td>Enforced</td></tr>
+            <tr><td><code>supabaseAdmin()</code></td><td>Webhooks, migrations only</td><td>Bypassed</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Role Hierarchy</h3>
+        <table class="data-table" style="margin-top: 0.75rem;">
+          <thead><tr><th>Role</th><th>Can Do</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Owner</strong></td><td>Everything + delete org + manage billing</td></tr>
+            <tr><td><strong>Admin</strong></td><td>Everything + manage team members</td></tr>
+            <tr><td><strong>Member</strong></td><td>Create, edit, publish documents</td></tr>
+            <tr><td><strong>Viewer</strong></td><td>Read-only access to all documents</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="callout callout-teal">
+      <strong>Defense in depth:</strong> Auth is checked at THREE layers. (1) Middleware validates JWT and blocks unauthenticated requests. (2) API routes call <code>requireSession()</code> and optionally <code>requireRole()</code>. (3) PostgreSQL RLS policies filter every query by org_id. Even if layers 1 and 2 fail, RLS prevents data leaks.
+    </div>
+  </section>
+
+  <!-- ─── 12. BILLING INTEGRATION ──────────────────────── -->
+  <section class="section section-alt" id="billing">
+    <div class="section-header">
+      <div class="section-num">Section 12</div>
+      <h2>Billing Integration</h2>
+      <div class="section-rule"></div>
+      <p>Stripe-powered with four tiers, real usage enforcement, and webhook-driven plan management.</p>
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table class="tier-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Free</th>
+            <th>Starter</th>
+            <th class="tier-highlight">Professional</th>
+            <th>Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI Proposals / Month</td>
+            <td>3</td>
+            <td>25</td>
+            <td>100</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Total Proposals</td>
+            <td>5</td>
+            <td>50</td>
+            <td>500</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Total Contracts</td>
+            <td>3</td>
+            <td>25</td>
+            <td>250</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Total Reports</td>
+            <td>2</td>
+            <td>15</td>
+            <td>100</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Clients</td>
+            <td>5</td>
+            <td>50</td>
+            <td>500</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Team Members</td>
+            <td>1</td>
+            <td>3</td>
+            <td>10</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Custom Branding</td>
+            <td class="dash">&mdash;</td>
+            <td class="check">&check;</td>
+            <td class="check">&check;</td>
+            <td class="check">&check;</td>
+          </tr>
+          <tr>
+            <td>Remove Watermark</td>
+            <td class="dash">&mdash;</td>
+            <td class="dash">&mdash;</td>
+            <td class="check">&check;</td>
+            <td class="check">&check;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── 13. CI/CD PIPELINE ───────────────────────────── -->
+  <section class="section" id="cicd">
+    <div class="section-header">
+      <div class="section-num">Section 13</div>
+      <h2>CI/CD Pipeline</h2>
+      <div class="section-rule"></div>
+      <p>Automated quality gates on every PR. No code reaches production without passing all four checks.</p>
+    </div>
+
+    <div class="diagram" style="margin-bottom: 2rem;">
+      <div class="diagram-title">Deploy Pipeline</div>
+      <div class="h-flow">
+        <div class="h-flow-node d-box-navy" style="background: var(--navy); color: white;">PR Created</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--coral);">Lint</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--coral);">Typecheck</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--coral);">Test</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--coral);">Build</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--teal);">Merge<br>to Main</div>
+        <div class="h-flow-arrow">&rarr;</div>
+        <div class="h-flow-node" style="border-color: var(--gold);">Vercel<br>Auto-Deploy</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>Quality Gate</h3>
+        <p>Every PR runs: <code>npm run lint</code>, <code>npm run typecheck</code>, <code>npm test</code>, <code>npm run build</code>. All four must pass. No build bypasses allowed.</p>
+      </div>
+      <div class="card">
+        <h3>Type Sync</h3>
+        <p>GitHub Actions auto-generates Supabase TypeScript types on merge. <code>database.types.ts</code> stays in sync with the actual schema.</p>
+      </div>
+      <div class="card">
+        <h3>Smoke Tests</h3>
+        <p>After Vercel deploys, Playwright runs against the live preview URL. Health check + critical path validation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 14. ENTERPRISE READINESS ─────────────────────── -->
+  <section class="section section-alt" id="enterprise">
+    <div class="section-header">
+      <div class="section-num">Section 14</div>
+      <h2>Enterprise Readiness</h2>
+      <div class="section-rule"></div>
+      <p>What exists today for enterprise deployments, and what's on the roadmap.</p>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 2.5rem;">
+      <div>
+        <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--teal); margin-bottom: 1rem;">What We Have</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div class="card" style="border-left: 3px solid var(--teal); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem;">Multi-Tenant Data Isolation</h3>
+            <p>RLS on every table. Org data never crosses boundaries.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--teal); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem;">Role-Based Access Control</h3>
+            <p>4-tier hierarchy with per-route enforcement.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--teal); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem;">Audit Logging</h3>
+            <p>Every action captured: who, what, when, from where.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--teal); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem;">Rate Limiting</h3>
+            <p>Distributed, per-endpoint, IP-based via Upstash Redis.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--teal); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem;">Kill Switches</h3>
+            <p>3-level circuit breakers: global, per-org, per-job.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--teal); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem;">Error Sanitization</h3>
+            <p>No raw API errors reach users. Sentry captures everything.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gray-400); margin-bottom: 1rem;">What's Missing</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div class="card" style="border-left: 3px solid var(--gray-300); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem; color: var(--gray-500);">SSO / SAML</h3>
+            <p>Currently Google OAuth only. Enterprise SSO requires Supabase Pro.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--gray-300); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem; color: var(--gray-500);">SOC 2 Compliance</h3>
+            <p>Architecture supports it, but formal audit not yet conducted.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--gray-300); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem; color: var(--gray-500);">API Access</h3>
+            <p>No public API for integrations yet. All access via web UI.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--gray-300); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem; color: var(--gray-500);">SLA Monitoring</h3>
+            <p>Sentry for errors, but no uptime SLA or status page.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--gray-300); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem; color: var(--gray-500);">Multi-Region</h3>
+            <p>Single region (us-east). Multi-region requires Supabase + Fly.io config.</p>
+          </div>
+          <div class="card" style="border-left: 3px solid var(--gray-300); padding: 1rem 1.25rem;">
+            <h3 style="font-size: 0.9rem; color: var(--gray-500);">Advanced Analytics</h3>
+            <p>Basic AI usage dashboard. No win-rate analysis or pipeline metrics yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 15. ARCHITECTURE SCORECARD ───────────────────── -->
+  <section class="section" id="scorecard">
+    <div class="section-header">
+      <div class="section-num">Section 15</div>
+      <h2>Architecture Scorecard</h2>
+      <div class="section-rule"></div>
+      <p>Honest grades against industry best practices. No vanity metrics.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="grade-card">
+        <div class="grade-circle grade-a">A</div>
+        <div class="grade-info">
+          <h4>AI Integration</h4>
+          <p>Multi-model strategy, prompt caching, embeddings, persistent memory, multi-agent orchestration with feedback loops. Cutting edge.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-a">A</div>
+        <div class="grade-info">
+          <h4>Developer Experience</h4>
+          <p>TypeScript strict, auto-generated types, CI/CD quality gates, agent-governed workflow, comprehensive project documentation.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-a">A-</div>
+        <div class="grade-info">
+          <h4>Security</h4>
+          <p>RLS, rate limiting, audit logging, input validation, error sanitization. Missing: SAML/SSO, formal penetration testing.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-a">A-</div>
+        <div class="grade-info">
+          <h4>Data Architecture</h4>
+          <p>pgvector in PostgreSQL, JSONB for flexibility, RLS for isolation. Missing: data retention policies, backup verification.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-b">B+</div>
+        <div class="grade-info">
+          <h4>Scalability</h4>
+          <p>Stateless API, async jobs, atomic claiming supports horizontal scaling. Single region, no auto-scaling on Fly.io.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-b">B+</div>
+        <div class="grade-info">
+          <h4>Reliability</h4>
+          <p>Error tracking, retry logic, timeout protection, kill switches. No chaos testing, no dead letter queue.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-b">B</div>
+        <div class="grade-info">
+          <h4>Observability</h4>
+          <p>Sentry errors, audit logs, console forwarding. Missing: structured metrics, APM dashboards, distributed tracing.</p>
+        </div>
+      </div>
+      <div class="grade-card">
+        <div class="grade-circle grade-b">B</div>
+        <div class="grade-info">
+          <h4>Testing</h4>
+          <p>Vitest + Playwright framework established. Coverage exists but has gaps. E2E tests for critical paths.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 16. LESSONS LEARNED ──────────────────────────── -->
+  <section class="section section-alt" id="lessons">
+    <div class="section-header">
+      <div class="section-num">Section 16</div>
+      <h2>Lessons Learned</h2>
+      <div class="section-rule"></div>
+      <p>Hard-won knowledge from building this system. Each one cost real time and debugging sessions.</p>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">1</div>
+      <div class="lesson-content">
+        <h4>Build-Time vs Runtime Are Different Worlds</h4>
+        <p>Next.js prerenders pages at build time where env vars may not exist. Runtime handles real requests where they MUST exist. We learned this the hard way when a "helpful" placeholder URL masked a broken Supabase connection in production. Rule: runtime code must throw on missing config. Build-time code can use placeholders.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">2</div>
+      <div class="lesson-content">
+        <h4>Return-Based Auth Beats Throw-Based</h4>
+        <p><code>requireSession()</code> returns <code>SessionContext | Response</code> instead of throwing. This eliminated try/catch boilerplate in every API route, made auth errors explicit in the type system, and prevented stack traces from leaking to users.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">3</div>
+      <div class="lesson-content">
+        <h4>Reviewer Parse Failures Must Never Block Delivery</h4>
+        <p>The Reviewer agent validates proposals with Claude Haiku. If Haiku returns malformed JSON (it happens), the proposal should still be delivered. We implemented a soft pass pattern — parse failure = pass with needs_human_review flag set.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">4</div>
+      <div class="lesson-content">
+        <h4>Memory Writes Must Be Non-Fatal</h4>
+        <p>The Memory Node (step 7 in the brain pipeline) runs AFTER the proposal is committed. If the OpenAI embedding API is down, the user still gets their proposal. Intelligence accumulation is valuable but never worth blocking delivery.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">5</div>
+      <div class="lesson-content">
+        <h4>Promise.allSettled Over Promise.all</h4>
+        <p>When fetching usage counts across 6 tables, one failed query shouldn't crash the entire response. <code>Promise.allSettled()</code> gives you partial results. We only use <code>Promise.all()</code> when ALL results are truly required to proceed.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">6</div>
+      <div class="lesson-content">
+        <h4>One Change Per Branch, Always</h4>
+        <p>Batching unrelated changes makes root cause analysis impossible when something breaks. We enforce: one logical change per branch, one branch per PR. It feels slower but catches issues faster.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">7</div>
+      <div class="lesson-content">
+        <h4>Vercel and Fly.io Are Separate Worlds</h4>
+        <p>Secrets set in Vercel don't propagate to Fly.io. The worker and brain have their own env vars managed via <code>fly secrets set</code>. We've been burned by updating one and forgetting the other. Now it's in the deployment checklist.</p>
+      </div>
+    </div>
+
+    <div class="lesson">
+      <div class="lesson-num">8</div>
+      <div class="lesson-content">
+        <h4>Solo Founder Architecture: Optimize for Debuggability</h4>
+        <p>As a solo builder, the ability to debug at 2 AM matters more than theoretical scalability. PostgreSQL polling is debuggable with a SQL query. Message brokers add infrastructure I'd have to monitor alone. Every architectural choice was filtered through: "Can I debug this by myself?"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 17. FAQ ──────────────────────────────────────── -->
+  <section class="section" id="faq">
+    <div class="section-header">
+      <div class="section-num">Section 17</div>
+      <h2>Frequently Asked Questions</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How long does AI proposal generation take?</div>
+      <div class="faq-a">The TypeScript worker generates a proposal in 15-30 seconds using Claude Sonnet. The full brain pipeline (7 agents) takes 60-120 seconds depending on research complexity. Users see real-time progress updates via Supabase Realtime.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why Python for the brain when everything else is TypeScript?</div>
+      <div class="faq-a">The brain orchestrates 7 agents with complex state management, async execution, and structured JSON output. Python's Anthropic SDK, asyncio, and the ML ecosystem are significantly more mature for this. TypeScript handles web, API, and simple jobs. They communicate via Supabase as shared state — no direct HTTP calls.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How does the intelligence get smarter over time?</div>
+      <div class="faq-a">Every proposal triggers a memory write: client psychographics (tone, themes, strategy) and a deal history entry are stored with a 1536-dimensional embedding. Future proposals for the same or similar clients retrieve this context via pgvector cosine similarity search. The more proposals you create, the more personalized they become.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What happens if the brain service goes down?</div>
+      <div class="faq-a">The TypeScript worker continues processing simple jobs (contracts, text extraction). Brain proposals stay in "queued" status until the brain comes back. No data is lost — Supabase is the system of record. Users can still use the standard AI generation path via the worker.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How is this different from PandaDoc or Proposify?</div>
+      <div class="faq-a">Those are template-filling tools. Boots generates proposals from scratch using AI that knows your business (org brain), remembers your clients (intelligence), and learns from outcomes (deal tracking). It's an AI-native proposal generator, not a document template editor.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can this be self-hosted?</div>
+      <div class="faq-a">The architecture supports it. Next.js runs anywhere Node.js runs. The worker and brain are Docker containers. Supabase can be self-hosted. You'd need to manage your own Stripe, Anthropic, and OpenAI API keys. Not currently offered as a product, but architecturally feasible.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How are secrets managed?</div>
+      <div class="faq-a">17 environment variables across three deployment targets. Vercel manages web app secrets. Fly.io manages worker and brain secrets separately via <code>fly secrets set</code>. No secrets in source code, no .env files committed. Sensitive vars in Vercel cannot be viewed after setting.</div>
+    </div>
+  </section>
+
+  <!-- ─── 18. ROADMAP ──────────────────────────────────── -->
+  <section class="section-full section-navy" id="roadmap">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-num" style="color: var(--gold);">Section 18</div>
+        <h2>Roadmap</h2>
+        <div class="section-rule"></div>
+        <p>Where we're going next. Foundation first, then features.</p>
+      </div>
+
+      <div class="roadmap">
+        <div class="roadmap-item roadmap-active">
+          <div class="roadmap-tag" style="color: var(--gold);">Current &mdash; Phase 0</div>
+          <h4 style="color: var(--white);">Stabilize Foundation</h4>
+          <p style="color: var(--gray-400);">Dev environment hardening, dependency pinning, Doppler credentials, Playwright testing, CI/CD pipeline validation. No new features until this passes.</p>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-tag" style="color: var(--gray-400);">Next &mdash; Phase 1</div>
+          <h4 style="color: var(--white);">Contract Dashboard + QuickBooks</h4>
+          <p style="color: var(--gray-400);">Full contract management dashboard, e-signature flow, QuickBooks integration for invoice sync.</p>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-tag" style="color: var(--gray-400);">Phase 2</div>
+          <h4 style="color: var(--white);">Intelligence UI</h4>
+          <p style="color: var(--gray-400);">Surface the intelligence backend in the frontend. Client psychographic profiles visible in UI, deal outcome tracking, win-rate analytics, org brain management.</p>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-tag" style="color: var(--gray-400);">Phase 3</div>
+          <h4 style="color: var(--white);">Enterprise Features</h4>
+          <p style="color: var(--gray-400);">SSO/SAML, API access for integrations, advanced analytics, custom webhook notifications, multi-region deployment options.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ───────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-logo">B<span>.</span></div>
+    <p>Boots On The Ground AI &middot; Aurora, Illinois</p>
+    <p style="margin-top: 0.5rem; color: var(--gray-500);">AI Solutions for Small Business</p>
+    <p style="margin-top: 1.5rem; font-size: 0.7rem; color: var(--gray-500);">
+      This document is confidential and proprietary. &copy; 2026 Boots On The Ground AI. All rights reserved.
+    </p>
+  </footer>
+
+</div><!-- /.main -->
+
+</body>
+</html>

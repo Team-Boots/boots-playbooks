@@ -898,150 +898,11 @@
     .toolbar-actions { flex-wrap: wrap; }
     .toolbar-btn { font-size: 0.72rem; padding: 0.4rem 0.7rem; }
   }
-  /* ===== LOGIN OVERLAY ===== */
-  .login-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, var(--navy) 0%, #0f1b33 100%);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Inter', sans-serif;
-  }
-
-  .login-overlay.hidden { display: none; }
-
-  .login-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    backdrop-filter: blur(10px);
-  }
-
-  .login-card .login-icon {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--terminal-green);
-    margin-bottom: 0.5rem;
-  }
-
-  .login-card h2 {
-    color: var(--white);
-    font-size: 1.4rem;
-    font-weight: 800;
-    margin-bottom: 0.25rem;
-  }
-
-  .login-card h2 span { color: var(--terminal-green); }
-
-  .login-card .login-subtitle {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .login-card input[type="email"] {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 8px;
-    background: rgba(0,0,0,0.3);
-    color: var(--white);
-    font-size: 0.95rem;
-    font-family: 'Inter', sans-serif;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .login-card input[type="email"]::placeholder { color: rgba(255,255,255,0.3); }
-  .login-card input[type="email"]:focus { border-color: var(--terminal-green); }
-
-  .login-btn {
-    width: 100%;
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    border: none;
-    border-radius: 8px;
-    background: var(--gold);
-    color: var(--navy);
-    font-size: 0.95rem;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .login-btn:hover { background: var(--gold-hover); }
-  .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .login-status {
-    margin-top: 1rem;
-    font-size: 0.85rem;
-    color: var(--terminal-green);
-    min-height: 1.2em;
-  }
-
-  .login-status.error { color: var(--danger); }
-
-  /* ===== SIGN OUT BUTTON ===== */
-  .signout-area {
-    margin-left: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-  }
-
-  .signout-email {
-    font-size: 0.65rem;
-    color: rgba(255,255,255,0.5);
-    max-width: 160px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .signout-btn {
-    padding: 0.3rem 0.7rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 6px;
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.7);
-    font-size: 0.7rem;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .signout-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: var(--white);
-    border-color: rgba(255,255,255,0.4);
-  }
 </style>
 </head>
 <body>
 
-  <!-- LOGIN OVERLAY -->
-  <div class="login-overlay" id="login-overlay">
-    <div class="login-card">
-      <div class="login-icon">$_</div>
-      <h2>TERMINAL <span>BUDDY</span></h2>
-      <p class="login-subtitle">Sign in to access your command reference</p>
-      <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" />
-      <button class="login-btn" id="login-btn" onclick="sendMagicLink()">Send Magic Link</button>
-      <div class="login-status" id="login-status"></div>
-    </div>
-  </div>
-
-  <!-- APP WRAPPER (hidden until auth) -->
-  <div id="app-wrapper" style="display:none">
+  <div id="app-wrapper">
 
   <!-- HEADER -->
   <header class="header">
@@ -1064,10 +925,6 @@
           <div class="header-stat-num" id="stat-custom">0</div>
           <div class="header-stat-label">Custom</div>
         </div>
-      </div>
-      <div class="signout-area" id="signout-area">
-        <span class="signout-email" id="user-email"></span>
-        <button class="signout-btn" onclick="signOut()">Sign Out</button>
       </div>
     </div>
   </header>
@@ -1292,100 +1149,7 @@
 
   </div><!-- /app-wrapper -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ===== SUPABASE AUTH =====
-const SUPABASE_URL = 'https://gqqzaphchpedaczatonq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxcXphcGhjaHBlZGFjemF0b25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc2NDAwNjcsImV4cCI6MjA4MzIxNjA2N30.G8wTlpSHf67NNCJkJy2C3r7zFGm6PaQRCXYjqv6i_MU';
-const ALLOWED_EMAILS = ['damara@bootsagentai.com'];
-
-const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-async function checkAuth() {
-  const { data: { session } } = await sbClient.auth.getSession();
-  if (session) {
-    showApp(session.user.email);
-  } else {
-    showLogin();
-  }
-}
-
-function showApp(email) {
-  document.getElementById('login-overlay').classList.add('hidden');
-  document.getElementById('app-wrapper').style.display = '';
-  document.getElementById('user-email').textContent = email || '';
-}
-
-function showLogin() {
-  document.getElementById('login-overlay').classList.remove('hidden');
-  document.getElementById('app-wrapper').style.display = 'none';
-}
-
-async function sendMagicLink() {
-  const emailInput = document.getElementById('login-email');
-  const statusEl = document.getElementById('login-status');
-  const btn = document.getElementById('login-btn');
-  const email = emailInput.value.trim().toLowerCase();
-
-  if (!email) {
-    statusEl.textContent = 'Please enter your email';
-    statusEl.className = 'login-status error';
-    return;
-  }
-
-  if (!ALLOWED_EMAILS.includes(email)) {
-    statusEl.textContent = 'This email is not authorized';
-    statusEl.className = 'login-status error';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-  statusEl.textContent = '';
-  statusEl.className = 'login-status';
-
-  const { error } = await sbClient.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: window.location.href }
-  });
-
-  if (error) {
-    statusEl.textContent = error.message;
-    statusEl.className = 'login-status error';
-    btn.disabled = false;
-    btn.textContent = 'Send Magic Link';
-  } else {
-    statusEl.textContent = 'Check your email for the magic link!';
-    statusEl.className = 'login-status';
-    btn.textContent = 'Link Sent';
-    setTimeout(() => { btn.disabled = false; btn.textContent = 'Send Magic Link'; }, 10000);
-  }
-}
-
-async function signOut() {
-  await sbClient.auth.signOut();
-  showLogin();
-}
-
-sbClient.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN' && session) {
-    showApp(session.user.email);
-  } else if (event === 'SIGNED_OUT') {
-    showLogin();
-  }
-});
-
-// Allow Enter key on email input
-document.addEventListener('DOMContentLoaded', () => {
-  const emailInput = document.getElementById('login-email');
-  if (emailInput) {
-    emailInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') sendMagicLink();
-    });
-  }
-  checkAuth();
-});
-
 // ===== TOOL CONFIG =====
 const TOOL_CONFIG = {
   'Docker':           { icon: '&#128051;', color: '#0db7ed' },

@@ -1,0 +1,6 @@
+video/
+worker/
+__pycache__/
+*.pyc
+*.mp4
+*.pages

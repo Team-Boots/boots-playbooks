@@ -1174,7 +1174,7 @@ const TOOL_CONFIG = {
   'Security':         { icon: '&#128274;', color: '#991B1B' }
 };
 
-// ===== BUILT-IN COMMANDS (278 total) =====
+// ===== BUILT-IN COMMANDS (279 total) =====
 const BUILTIN_COMMANDS = [
   // === DOCKER (10) ===
   { id:'d1',  tool:'Docker', command:'docker build -t <name> .', description:'Build an image from a Dockerfile in the current directory', difficulty:'beginner', type:'most-used' },
@@ -1446,7 +1446,7 @@ const BUILTIN_COMMANDS = [
   { id:'cw23', tool:'Claude Workflows', command:'cat package.json | claude -p "audit these deps for security issues and outdated packages"', description:'Workflow: Dependency audit — quick security check without leaving the terminal', difficulty:'intermediate', type:'superpower' },
   { id:'cw24', tool:'Claude Workflows', command:'claude "deploy this to Vercel and fix any build errors"', description:'Workflow: Deploy + fix — Claude runs the deploy, reads errors, fixes them, redeploys', difficulty:'advanced', type:'superpower' },
 
-  // === GIT RESCUE: When Everything Goes Wrong (16) ===
+  // === GIT RESCUE: When Everything Goes Wrong (17) ===
   { id:'gr1',  tool:'Git Rescue', command:'git reflog', description:'View EVERY action Git recorded — your undo history, even after reset --hard', difficulty:'intermediate', type:'superpower' },
   { id:'gr2',  tool:'Git Rescue', command:'git checkout -b rescue-branch HEAD@{5}', description:'Recover lost work: create a branch from a reflog entry', difficulty:'advanced', type:'superpower' },
   { id:'gr3',  tool:'Git Rescue', command:'git stash list', description:'See all your stashed changes (most people forget they have stashes)', difficulty:'beginner', type:'most-used' },
@@ -1463,6 +1463,7 @@ const BUILTIN_COMMANDS = [
   { id:'gr14', tool:'Git Rescue', command:'git revert <commit-hash>', description:'Safely undo a commit by creating a NEW commit that reverses it (safe for shared branches)', difficulty:'intermediate', type:'most-used' },
   { id:'gr15', tool:'Git Rescue', command:'git reset --soft HEAD~1', description:'Undo last commit but keep changes staged — good for re-doing a commit', difficulty:'intermediate', type:'superpower' },
   { id:'gr16', tool:'Git Rescue', command:'git push --force-with-lease', description:'Force push with safety net — fails if someone else pushed (prevents overwriting their work)', difficulty:'advanced', type:'danger-zone' },
+  { id:'gr17', tool:'Git Rescue', command:'git reset --soft HEAD~1 && git push --force-with-lease', description:'Delete last commit locally and from remote while keeping your code changes staged — swap --soft for --hard to also discard the changes', difficulty:'intermediate', type:'danger-zone' },
 
   // === SHELL SCRIPTS: Automation Power Moves (16) ===
   { id:'sh1',  tool:'Shell Scripts', command:'alias gs="git status" && alias gp="git push" && alias gco="git checkout"', description:'Create quick aliases — add to ~/.zshrc to make permanent', difficulty:'beginner', type:'most-used' },
